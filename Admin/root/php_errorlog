@@ -1,0 +1,98 @@
+[07-Oct-2018 05:47:38 CST6CDT] PHP Fatal error:  require(): Failed opening required '/home/braiinsc/Braiins/Com/inc/Constants.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc on line 11
+[07-Oct-2018 09:40:37 CST6CDT] PHP Fatal error:  require(): Failed opening required '/home/braiinsc/Braiins/Com/inc/Constants.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc on line 11
+[07-Oct-2018 09:48:08 CST6CDT] PHP Fatal error:  require(): Failed opening required '/home/braiinsc/Braiins/Com/inc/Constants.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc on line 11
+[07-Oct-2018 10:10:17 CST6CDT] PHP Fatal error:  Uncaught Error: Class 'BDB' not found in /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc:24
+Stack trace:
+#0 /home/davidjo1/pacio/ssim-admin/root/Roles.php(12): require()
+#1 {main}
+  thrown in /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc on line 24
+[07-Oct-2018 10:35:57 CST6CDT] PHP Fatal error:  Uncaught Error: Class 'BDB' not found in /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc:24
+Stack trace:
+#0 /home/davidjo1/pacio/ssim-admin/root/Roles.php(12): require()
+#1 {main}
+  thrown in /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc on line 24
+[07-Oct-2018 10:46:25 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function Head() in /home/davidjo1/pacio/ssim-admin/root/Roles.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/davidjo1/pacio/ssim-admin/root/Roles.php on line 14
+[07-Oct-2018 10:47:51 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function utime() in /home/davidjo1/pacio/ssim-admin/root/inc/Funcs.inc:35
+Stack trace:
+#0 /home/davidjo1/pacio/ssim-admin/root/BaseSIM.inc(23): require()
+#1 /home/davidjo1/pacio/ssim-admin/root/Roles.php(12): require('/home/davidjo1/...')
+#2 {main}
+  thrown in /home/davidjo1/pacio/ssim-admin/root/inc/Funcs.inc on line 35
+[07-Oct-2018 11:05:38 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function Error() in /home/davidjo1/pacio/ssim-admin/root/inc/ClassBDB.inc:914
+Stack trace:
+#0 /home/davidjo1/pacio/ssim-admin/root/inc/ClassBDB.inc(178): LError('ResQuery', 'Select * From R...')
+#1 /home/davidjo1/pacio/ssim-admin/root/Roles.php(28): BDB->ResQuery('Select * From R...')
+#2 {main}
+  thrown in /home/davidjo1/pacio/ssim-admin/root/inc/ClassBDB.inc on line 914
+[07-Oct-2018 11:12:36 CST6CDT] PHP Warning:  fopen(/pacio/ssim-admin/root/Admin/Logs/Admin.log): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/inc/FuncsGen.inc on line 77
+[07-Oct-2018 11:19:34 CST6CDT] PHP Warning:  fopen(/home/davidjo1/pacio/ssim-admin/root/Admin/Logs/Admin.log): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/inc/FuncsGen.inc on line 77
+[07-Oct-2018 14:29:38 CST6CDT] PHP Fatal error:  require(): Failed opening required '/home/braiinsc/Braiins/Com/inc/Constants.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BaseBraiins.inc on line 12
+[07-Oct-2018 14:58:07 CST6CDT] PHP Notice:  Use of undefined constant Com_Str - assumed 'Com_Str' in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[07-Oct-2018 14:58:07 CST6CDT] PHP Warning:  require(Com_StrPropNamesA.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[07-Oct-2018 14:58:07 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_StrPropNamesA.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[07-Oct-2018 14:58:41 CST6CDT] PHP Notice:  Use of undefined constant Com_Str - assumed 'Com_Str' in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 19
+[07-Oct-2018 14:58:41 CST6CDT] PHP Warning:  require(Com_StrFolios.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 19
+[07-Oct-2018 14:58:41 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_StrFolios.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 19
+[07-Oct-2018 15:11:15 CST6CDT] PHP Notice:  Use of undefined constant Com_Str - assumed 'Com_Str' in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[07-Oct-2018 15:11:15 CST6CDT] PHP Warning:  require(Com_StrPropNamesA.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[07-Oct-2018 15:11:15 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_StrPropNamesA.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[07-Oct-2018 15:24:03 CST6CDT] PHP Notice:  Use of undefined constant Com_Str - assumed 'Com_Str' in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 19
+[07-Oct-2018 15:24:03 CST6CDT] PHP Warning:  require(Com_StrFolios.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 19
+[07-Oct-2018 15:24:03 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_StrFolios.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 19
+[07-Oct-2018 15:53:28 CST6CDT] PHP Notice:  Undefined property: stdClass::$Role in /home/davidjo1/pacio/ssim-admin/root/Roles.php on line 50
+[08-Oct-2018 10:11:01 CST6CDT] PHP Notice:  Use of undefined constant Com_Inc - assumed 'Com_Inc' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:11:01 CST6CDT] PHP Warning:  require(Com_IncFuncsSIM.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:11:01 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_IncFuncsSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:13:55 CST6CDT] PHP Notice:  Use of undefined constant Com_Inc - assumed 'Com_Inc' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:13:55 CST6CDT] PHP Warning:  require(Com_IncFuncsSIM.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:13:55 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_IncFuncsSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:19:51 CST6CDT] PHP Warning:  require(../inc/FuncsSIM.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:19:51 CST6CDT] PHP Fatal error:  require(): Failed opening required '../inc/FuncsSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:20:37 CST6CDT] PHP Warning:  require(./inc/FuncsSIM.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:20:37 CST6CDT] PHP Fatal error:  require(): Failed opening required './inc/FuncsSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:21:56 CST6CDT] PHP Warning:  require(../inc/FuncsSIM.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:21:56 CST6CDT] PHP Fatal error:  require(): Failed opening required '../inc/FuncsSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 13
+[08-Oct-2018 10:23:23 CST6CDT] PHP Notice:  Use of undefined constant Com_Inc - assumed 'Com_Inc' in /home/davidjo1/pacio/ssim-admin/root/RegionsEtc.php on line 13
+[08-Oct-2018 10:23:23 CST6CDT] PHP Warning:  require(Com_IncFuncsSIM.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/RegionsEtc.php on line 13
+[08-Oct-2018 10:23:23 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_IncFuncsSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/RegionsEtc.php on line 13
+[08-Oct-2018 10:23:37 CST6CDT] PHP Notice:  Use of undefined constant Com_Inc - assumed 'Com_Inc' in /home/davidjo1/pacio/ssim-admin/root/RegionsEtc.php on line 13
+[08-Oct-2018 10:23:37 CST6CDT] PHP Warning:  require(Com_IncFuncsSIM.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/RegionsEtc.php on line 13
+[08-Oct-2018 10:23:37 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_IncFuncsSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/RegionsEtc.php on line 13
+[08-Oct-2018 10:25:47 CST6CDT] PHP Notice:  Use of undefined constant Com_Str - assumed 'Com_Str' in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[08-Oct-2018 10:25:47 CST6CDT] PHP Warning:  require(Com_StrPropNamesA.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[08-Oct-2018 10:25:47 CST6CDT] PHP Fatal error:  require(): Failed opening required 'Com_StrPropNamesA.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BuildFolios.php on line 15
+[08-Oct-2018 10:47:27 CST6CDT] PHP Fatal error:  require(): Failed opening required 'BaseSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BuildTxsETsESs.php on line 17
+[08-Oct-2018 10:52:59 CST6CDT] PHP Fatal error:  require(): Failed opening required 'BaseSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 18
+[08-Oct-2018 11:11:17 CST6CDT] PHP Warning:  require(../str/PMemNamesA.inc): failed to open stream: No such file or directory in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 20
+[08-Oct-2018 11:11:17 CST6CDT] PHP Fatal error:  require(): Failed opening required '../str/PMemNamesA.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/Folios.php on line 20
+[08-Oct-2018 11:20:55 CST6CDT] PHP Fatal error:  require(): Failed opening required 'BaseSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BuildProps.php on line 13
+[08-Oct-2018 11:45:53 CST6CDT] PHP Fatal error:  require(): Failed opening required 'BaseSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/Zones.php on line 13
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_EntityTypesA - assumed 'ODI_EntityTypesA' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 47
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_EntityTypesA in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 47
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant TaxnB_DB - assumed 'TaxnB_DB' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 52
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_HeadingsAA - assumed 'ODI_HeadingsAA' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 54
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_HeadingsAA in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 54
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_Descr - assumed 'ODI_Descr' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 55
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_Descr in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 55
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_EntityTypesA - assumed 'ODI_EntityTypesA' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 47
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_EntityTypesA in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 47
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant TaxnB_DB - assumed 'TaxnB_DB' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 52
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_HeadingsAA - assumed 'ODI_HeadingsAA' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 54
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_HeadingsAA in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 54
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_Descr - assumed 'ODI_Descr' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 55
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_Descr in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 55
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_EntityTypesA - assumed 'ODI_EntityTypesA' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 47
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_EntityTypesA in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 47
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant TaxnB_DB - assumed 'TaxnB_DB' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 52
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_HeadingsAA - assumed 'ODI_HeadingsAA' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 54
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_HeadingsAA in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 54
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Use of undefined constant ODI_Descr - assumed 'ODI_Descr' in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 55
+[09-Oct-2018 15:04:54 CST6CDT] PHP Notice:  Undefined index: ODI_Descr in /home/davidjo1/pacio/ssim-admin/root/TxsETsESs.php on line 55
+[09-Oct-2018 15:06:34 CST6CDT] PHP Parse error:  syntax error, unexpected 'TABLE' (T_STRING) in /home/davidjo1/pacio/ssim-admin/root/BuildOntsETsESs.php on line 66
+[09-Oct-2018 15:27:12 CST6CDT] PHP Notice:  Undefined variable: NotesB in /home/davidjo1/pacio/ssim-admin/root/Members.php on line 20
+[10-Oct-2018 04:15:51 CST6CDT] PHP Fatal error:  require(): Failed opening required 'BaseSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BroSetImport.php on line 28
+[11-Oct-2018 15:03:59 CST6CDT] PHP Fatal error:  require(): Failed opening required 'BaseSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BroSetImport.php on line 28
+[11-Oct-2018 15:04:19 CST6CDT] PHP Fatal error:  require(): Failed opening required 'BaseSIM.inc' (include_path='.:/usr/local/php70/pear') in /home/davidjo1/pacio/ssim-admin/root/BroSetExport.php on line 20

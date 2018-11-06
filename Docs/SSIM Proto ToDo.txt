@@ -1,0 +1,14 @@
+/* Pacio\Development\SSIM Proto\Docs\SSIM Proto ToDo.txt 2018.10.10
+
+Pacio SSIM Proto ToDo
+=====================
+
+ToDo
+====
+Add Cryptocurrencies
+
+Consider if separate DBs are needed. Look at BRB class code re separate DBs
+
+Document coding conventions: in progress in M:\Pacio\Development\SSIM Proto\Docs\SSIM Proto.txt
+
+Tx Import - ToDos in TreePad
