@@ -97,7 +97,7 @@ function ElapsedTime($startUtime) {
 #####################
 # ChrList Functions #
 #####################
-/* 2018.10.26 Use removed as IFRS values for dimension ids etc exceed 255
+# 2018.10.26 All use of these functions should be removed, as IFRS values for dimension ids etc exceed 255
 # Fns to do with storing small integers in characters coded as chr(val + 48) to make 1 = '1' etc
 
 function IntToChr($i) {
@@ -139,7 +139,6 @@ function ChrListToCsList($chrList) {
     $csList .= ',' . (ord($chrList[$i]) - 48);
   return substr($csList, 1);
 }
-*/
 
 #####################
 # CsvList Functions # To replace some of the above ChrList Functions
