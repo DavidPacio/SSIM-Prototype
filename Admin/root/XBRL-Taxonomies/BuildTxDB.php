@@ -214,30 +214,41 @@ foreach ($LinkbasesA as $href) {
   $node = $NodesA[++$NodeX]; # linkbase node
   #DumpExport("Node $NodeX", $node);
   # Add/update the namespaces
+  # <link:linkbase xmlns:gen="http://xbrl.org/2008/generic" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:ref="http://www.xbrl.org/2006/ref" xmlns:reference="http://xbrl.org/2008/reference" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xbrl.org/2006/ref http://www.xbrl.org/2006/ref-2006-02-27.xsd http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd http://xbrl.org/2008/reference http://www.xbrl.org/2008/generic-reference.xsd http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd http://www.w3.org/1999/xlink http://www.xbrl.org/2003/xlink-2003-12-31.xsd">
+  # <link:linkbase xml:lang="en-US" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
   foreach ($node['attributes'] as $a => $v) {
     if (strpos($a, 'xmlns') === 0)
-      # xmlns
+      # xmlns:link
+      # xmlns:xlink
+      # xmlns:ref
+      # xmlns:reference
+      # xmlns:xsi
       # xmlns:gen="http://xbrl.org/2008/generic"
       AddNamespace($a, $v);
-    else if ($a == 'xsi:schemaLocation') {
-      # ... xsi:schemaLocation="http://www.xbrl.org/2006/ref http://www.xbrl.org/2006/ref-2006-02-27.xsd http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd http://xbrl.org/2008/reference http://www.xbrl.org/2008/generic-reference.xsd http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd http://www.w3.org/1999/xlink http://www.xbrl.org/2003/xlink-2003-12-31.xsd">
-      # schemaLocation
-      # space separated namespace | xsd, either once or multiple times
-      $A = explode(' ', trim($v));
-      $n = count($A);
-      #Dump("xsi:schemaLocation $n", $A);
-      for ($i=0; $i < $n; ) {
-        AddNamespace('', $A[$i++]); # no prefix
-        $loc = FileAdjustRelative($A[$i++]);
-        # Expect these schema to have been imported. If not, the schema needs to added to the missing schema list in $MissedScemasAA
-        if ($o = $DB->OptObjQuery("Select Id,FileIds From Imports where Location='$loc'"))
-          $DB->StQuery("Update Imports Set Num=Num+1,FileIds='".$o->FileIds.','.$FileId."' Where Id=$o->Id");
-        else
-          DieNow("Schema $loc referenced in the schemaLocation of &lt;link:linkbase at node $NodeX of LinkbaseId $LinkbaseId $File has not been imported"); # http://www.xbrl.org/2006/ref-2006-02-27.xsd
-          # Die - Schema http://www.xbrl.org/2006/ref-2006-02-27.xsd referenced in the schemaLocation of <link:linkbase at node 0 of LinkbaseId 9 http://xbrl.ifrs.org/taxonomy/2018-03-16/full_ifrs/dimensions/gre_full_ifrs-dim_2018-03-16.xml has not been imported
-      }
-    }else
-      DieNow("Unknown <linkbase attribute $a");
+    else switch ($a) {
+      case 'xsi:schemaLocation':
+        # ... xsi:schemaLocation="http://www.xbrl.org/2006/ref http://www.xbrl.org/2006/ref-2006-02-27.xsd http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd http://xbrl.org/2008/reference http://www.xbrl.org/2008/generic-reference.xsd http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd http://www.w3.org/1999/xlink http://www.xbrl.org/2003/xlink-2003-12-31.xsd">
+        # schemaLocation
+        # space separated namespace | xsd, either once or multiple times
+        $A = explode(' ', trim($v));
+        $n = count($A);
+        #Dump("xsi:schemaLocation $n", $A);
+        for ($i=0; $i < $n; ) {
+          AddNamespace('', $A[$i++]); # no prefix
+          $loc = FileAdjustRelative($A[$i++]);
+          # Expect these schema to have been imported. If not, the schema needs to added to the missing schema list in $MissedScemasAA
+          if ($o = $DB->OptObjQuery("Select Id,FileIds From Imports where Location='$loc'"))
+            $DB->StQuery("Update Imports Set Num=Num+1,FileIds='".$o->FileIds.','.$FileId."' Where Id=$o->Id");
+          else
+            DieNow("Schema $loc referenced in the schemaLocation of &lt;link:linkbase at node $NodeX of LinkbaseId $LinkbaseId $File has not been imported"); # http://www.xbrl.org/2006/ref-2006-02-27.xsd
+            # Die - Schema http://www.xbrl.org/2006/ref-2006-02-27.xsd referenced in the schemaLocation of <link:linkbase at node 0 of LinkbaseId 9 http://xbrl.ifrs.org/taxonomy/2018-03-16/full_ifrs/dimensions/gre_full_ifrs-dim_2018-03-16.xml has not been imported
+        }
+        break;
+      case 'xml:lang':
+        break;
+      defaultt:
+        DieNow("Unknown linkbase attribute $a");
+    }
   }
   while (++$NodeX < $NumNodes) {
     $node = $NodesA[$NodeX];

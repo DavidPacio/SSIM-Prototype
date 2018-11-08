@@ -38,6 +38,7 @@ switch ($sel) {
   case 2: # 'Graphical' View of the Dims
     $GraphicalB = true;
     $titleExtra = " Listing with a 'Graphical' View of the Dims";
+    $maxDimId = $DB->OneQuery('Select count(*) from Dimensions');
     break;
   case 3: # Hypercubes and Dimensions without Dimension Members
     $MediumB = true;
@@ -68,8 +69,8 @@ while ($o = $res->fetch_object()) {
     if ($ShortB) # Short Version with Dims as just Ids, plus Subset Info
       echo "<tr class='b bg0'><td class=c>Hypercube<br>Id</td><td class=c>Dimension Ids</td><td class=c>Hypercube is Subset of Hypercubes:<br>(Not working currently)</td><td class=c>Hypercube has Hypercube Subsets:<br>(Not working currently)</td></tr>\n";
     else if ($GraphicalB) {
-      $hdg = "<tr class='b bg0'><td class=c>Hypercubes</td><td colspan=".DimId_Max." class=c>Dimension Ids</td></tr>\n<tr class='b bg0'><td class=c>Id</td>";
-      for ($i=1;$i<=DimId_Max; ++$i)
+      $hdg = "<tr class='b bg0'><td class=c>Hypercubes</td><td colspan=$maxDimId class=c>Dimension Ids</td></tr>\n<tr class='b bg0'><td class=c>Id</td>";
+      for ($i=1;$i<=$maxDimId; ++$i)
         $hdg .= "<td>$i</td>";
       echo $hdg."</tr>\n";
     }else if ($MediumB) # Hypercubes and Dimensions without Dimension Members
@@ -109,7 +110,7 @@ while ($o = $res->fetch_object()) {
         $ds .= "<td>#</td>";
         ++$d;
       }
-      for ( ;$d<=DimId_Max; ++$d)
+      for ( ;$d<=$maxDimId; ++$d)
         $ds .= '<td></td>';
       echo $ds."</tr>\n";
       $n++;
@@ -164,7 +165,7 @@ while ($o = $res->fetch_object()) {
       } # end of dimensions loop
       if ($ShortB) {
         $subOf = $hasSubs = '';
-        #for ($i=1; $i<=HyId_Max; ++$i)
+        #for ($i=1; $i<=HyId_Max; ++$i) If this code gets reinstated use a count on the Hypercubes table rather than a constant
         #  if ($i != $hyId) {
         #    if (IsHypercubeSubset($hyId, $i)) $subOf   .= ", $i"; # is hyId a subset of i?
         #    if (IsHypercubeSubset($i, $hyId)) $hasSubs .= ", $i"; # is i a subset of hyId?

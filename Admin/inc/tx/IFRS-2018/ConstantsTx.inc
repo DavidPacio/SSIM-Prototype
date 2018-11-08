@@ -2,12 +2,18 @@
 
 XBRL IFRS 2018 taxonomy specific stuff
 
+Actually nothing as of 2018.11.08
+
 Plus currently unused stuff from the 2013 work
 
-Plus some counts andd comments on IFRS 2018
+Plus some counts and comments on IFRS 2018
+
+See also for IFRS numbers etc:
+https://www.ifrs.org/-/media/feature/standards/taxonomy/2018/ifrs-taxonomy-illustrated/ifrs_taxonomy_architecture_2018.pdf
 
 History:
 2018.10.27 Started
+2018.11.08 DimId_Max and HyId_Max taken OoS
 */
 
 
@@ -54,7 +60,7 @@ History:
 # #           ExceptNon       48 |
 # #           Analysis        49 |
 # #           GroupTrans      50 |
-const DimId_Max           = 131;
+# const DimId_Max            131
 
 # Hypercube Ids
 #onst HY_Id_Basic     =  1;
@@ -62,7 +68,7 @@ const DimId_Max           = 131;
 #onst HY_Id_Officers  = 36;
 #onst HY_Id_TPAs      = 39;
 #onst HY_Id_Countries = 40;
-const HyId_Max        = 150 ; # Excl Empty
+#onst HyId_Max        = 150 ; # Excl Empty
 
 # #onst MType_TFA_LandBldg= 2; # TFAClasses.LandBuildings - Buildings    -> TFAOwnership.OwnedOrFreehold, ShortLeaseholdProperties, and LongLeaseholdProperties (185, 187, 188)
 # #onst MType_TFA_Other   = 3; # TFAClasses.InvestProperties - Others    -> TFAOwnership.OwnedOrFreehold, Leased (185, 186)

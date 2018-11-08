@@ -13,6 +13,8 @@ Fix Clean call skip for $input re double quoted searches
 History:
 2018.10.24 Started based on the SIM version
            Tuple stuff removed
+2018.11.08 Removed use of $ToArcrolesA to record arcs used by ToTrees() to exclude them from FromTrees() as the concept was flawed and for calculation arcs with just one arcrole all from cases were being zapped
+           Added "'To' Trees for:" and "'From' Trees for:" to the Trees Type column content
 
 */
 require '../../inc/BaseTx.inc';
@@ -36,7 +38,6 @@ $DataTypeFiltersA = [];
 $input    = Clean($_POST['Input'], FT_STR);
 $TypeB    = isset($_POST['Type']);
 $ExpandOnlyOwnToTreeB = isset($_POST['ExpandOnlyOwnToTree']);
-$FromTreeB= isset($_POST['FromTree']);
 $TreeChoice=Clean($_POST['TreeChoice'], FT_INT);
 $NameB    = isset($_POST['Name']);
 #SpacesB  = isset($_POST['Spaces']);
@@ -99,7 +100,7 @@ Form($origInput);
 # --------
 
 function Lookup($input) {
-  global $DB, $TxName, $TypeB, $SearchAB, $FilterByTypeB, $DataTypeFiltersA, $FromTreeB, $TreeChoice; #, $ShowBrosB, $ExclBrosB;
+  global $DB, $TxName, $TypeB, $SearchAB, $FilterByTypeB, $DataTypeFiltersA, $TreeChoice; #, $ShowBrosB, $ExclBrosB;
   $pHdg = '<p class=c>';
   if ($FilterByTypeB) {
     $list = '';
@@ -109,13 +110,8 @@ function Lookup($input) {
   }
   #if ($ExclBrosB) $pHdg .= 'Concrete tree elements used in Bros are excluded.<br>';
 
-  if ($FromTreeB || $TreeChoice) {
-    if ($FromTreeB)
-      $pHdg .= "'From' Trees Only i.e. No 'To' trees.";
-    if ($TreeChoice)
-      $pHdg .= LinkTypeToStr($TreeChoice).' Trees Only.';
-    $pHdg .= '<br>';
-  }
+  if ($TreeChoice)
+    $pHdg .= LinkTypeToStr($TreeChoice).' Trees Only.<br>';
   $pHdg .= 'Tree element Types are indicated by: [A] = Abstract, [C] = Concrete'
    #. ($ShowBrosB ? ' or * if used in Bros' : '')
     . ',<br>followed by the El Id, and when applicable [H &amp; the Hy Id(s)]'
@@ -161,7 +157,7 @@ function Lookup($input) {
 }
 
 function ElementInfo($o) {
-  global $DB, $TargetId, $FromTreeB, $StartEndTxIdsGA;
+  global $DB, $TargetId, $StartEndTxIdsGA;
   $elId = (int)$o->Id;
   $name = $o->name;
   $substGroupN = (int)$o->TesgN;
@@ -239,15 +235,13 @@ function ElementInfo($o) {
 <tr class=b><td>Type</td><td>Tree</td></tr>
 ";
   $TargetId = $elId; # Global for use by TreeElement()
-  if (!$FromTreeB)
     ToTrees($elId);
   FromTrees($elId);
   echo "</table>\n";
 } // End ElementInfo($o)
 
 function ToTrees($toId) {
-  global $DB, $TargetId, $ToArcrolesA, $TreeChoice, $StartEndTxIdsGA, $ExpandOnlyOwnToTreeB; # Target = $toId
-  $ToArcrolesA = []; # to record arcs used by ToTrees() to exclude them from FromTrees() processing
+  global $DB, $TargetId, $TreeChoice, $StartEndTxIdsGA, $ExpandOnlyOwnToTreeB; # Target = $toId
   # Fetch arcs to $fromId for all arcroles.
   # 07.11.11 Added Distinct re duplicates e.g. for 4062. But note comments below vs Distinct and Group by.
   # Taxonomy Arcrole Id (Arcroles.Id) constants which are in TLTN_ sequence
@@ -273,10 +267,9 @@ function ToTrees($toId) {
     while ($o = $res->fetch_object()) {
       #echo "T Arc FromId $o->FromId => $toId, ArcroleId $o->ArcroleId, PRoleId $o->PRoleId rn=$rn of $res->num_rows<br>";
       $arcroleId = (int)$o->ArcroleId;
-      $ToArcrolesA[$arcroleId] = 1;
       if ($arcroleId != $pArcroleId) {
         OutputAbstractElements();
-        echo ($rn ? "</td></tr>\n" : ''), "<tr><td class=top>", Arcrole($pArcroleId = $arcroleId, true), '</td><td>';
+        echo ($rn ? "</td></tr>\n" : ''), "<tr><td class=top>'To' Trees for:<br>", Arcrole($pArcroleId = $arcroleId, true), '</td><td>';
         ++$rn;
         $prevPRoleId = $n = 0;
       }
@@ -371,7 +364,7 @@ function ToTrees($toId) {
 
 # Fetch arcs from $fromId for all arcroles not already processed via ToTrees()
 function FromTrees($fromId) {
-  global $DB, $ToArcrolesA, $TreeChoice, $StartEndTxIdsGA;
+  global $DB, $TreeChoice, $StartEndTxIdsGA;
   $arcrolesA = [];
   # Taxonomy Arcrole Id (Arcroles.Id) constants which are in TLTN_ sequence
   # -------------------                                 /- TLTN_* arc (link) type
@@ -387,12 +380,10 @@ function FromTrees($fromId) {
     case 0: $i=TARId_HypercubeDim; $end = TARId_SummationItem; break; # All
     case 1: $i=TARId_HypercubeDim; $end = TARId_DimDefault;    break; # Definition
     case 2: $i=TARId_ParentChild;  $end = TARId_ParentChild;   break; # Presentation
-    case 3: $i=TARId_SummationItem;$end = TARId_SummationItem; break; # Caculation
+    case 3: $i=TARId_SummationItem;$end = TARId_SummationItem; break; # Calculation
   }
   for ( ; $i <= $end; $i++)
-    if (!isset($ToArcrolesA[$i]))
-      $arcrolesA[] = $i;
-  if (!count($arcrolesA)) return;
+    $arcrolesA[] = $i;
   $res = $DB->ResQuery("Select ArcroleId,ToId,PRoleId,PrefLabelRoleId,TargetRoleId from Arcs Where ArcroleId In(" .
                          implode(',', $arcrolesA) . ") and FromId=$fromId Order by ArcroleId,PRoleId,TargetRoleId,ArcOrder");
   if ($res->num_rows) {
@@ -404,7 +395,7 @@ function FromTrees($fromId) {
       $arcroleId = (int)$o->ArcroleId;
       if ($arcroleId != $pArcroleId) {
         OutputAbstractElements();
-        echo ($rn ? "</td></tr>\n" : ''), "<tr><td class=top>", Arcrole($pArcroleId = $arcroleId, true), '</td><td>';
+        echo ($rn ? "</td></tr>\n" : ''), "<tr><td class=top>'From' Trees for:<br>", Arcrole($pArcroleId = $arcroleId, true), '</td><td>';
         ++$rn;
         $prevPRoleId = $n = 0;
         $startEndElementsA = [];
@@ -543,10 +534,9 @@ function NoGo($msg) {
 }
 
 function Form($input) {
-  global $TypeB, $FromTreeB, $ExpandOnlyOwnToTreeB, $TreeChoice, $NameB, $SearchAB, $DataTypeFiltersA; # , $SpacesB, $ShowBrosB, $ExclBrosB;
+  global $TypeB, $ExpandOnlyOwnToTreeB, $TreeChoice, $NameB, $SearchAB, $DataTypeFiltersA; # , $SpacesB, $ShowBrosB, $ExclBrosB;
   $typeChecked     = ($TypeB    ? ' checked' : '');
   $expandOwnChecked= ($ExpandOnlyOwnToTreeB? ' checked' : '');
-  $fromTreeChecked = ($FromTreeB? ' checked' : '');
   $TreeChoice0Checked = ($TreeChoice==0 ? ' checked' : '');
   $treeChoice1Checked = ($TreeChoice==1 ? ' checked' : '');
   $treeChoice2Checked = ($TreeChoice==2 ? ' checked' : '');
@@ -575,7 +565,6 @@ echo <<< FORM
 <tr><td class=r>Include Element Data Type and Duration in Trees:</td><td><input class=radio type=checkbox name=Type value=1$typeChecked></td></tr>
 <tr><td class='r top'>Show only Concrete Elements of Checked Data Type(s) in Trees:</td><td><input class=radio type=checkbox name=Money value=1$moneyChecked> Money<input class=radio type=checkbox name='String' value=1$stringChecked> String<input class=radio type=checkbox name='Bool' value=1$boolChecked> Boolean<input class=radio type=checkbox name='Date' value=1$dateChecked> Date<input class=radio type=checkbox name='Decimal' value=1$decimalChecked> Decimal<input class=radio type=checkbox name='Percent' value=1$percentChecked> Percent<input class=radio type=checkbox name='Share' value=1$shareChecked> Share<input class=radio type=checkbox name='PerShare' value=1$perShareChecked> PerShare<br><span class=s>None checked means all. Rarely used types not listed above always appear if encountered.</span></td></tr>
 <tr><td class=r>Expand only own branch not sibling ones in 'To' Trees:</td><td><input class=radio type=checkbox name=ExpandOnlyOwnToTree value=1$expandOwnChecked></td></tr>
-<tr><td class=r>Show only 'From' Trees i.e. Omit 'To' Trees in following choice:</td><td><input class=radio type=checkbox name=FromTree value=1$fromTreeChecked></td></tr>
 <tr><td class=r>All Trees:</td><td><input class=radio type=radio name=TreeChoice value=0$TreeChoice0Checked></td></tr>
 <tr><td class=r>Only Definition Trees:</td><td><input class=radio type=radio name=TreeChoice value=1$treeChoice1Checked></td></tr>
 <tr><td class=r>Only Presentation Trees:</td><td><input class=radio type=radio name=TreeChoice value=2$treeChoice2Checked></td></tr>
