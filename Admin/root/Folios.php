@@ -77,7 +77,7 @@ while ($o = $res->fetch_object()) {
   $fName  = $o->Name;
   $propsS = $o->Props;
   $nProps = strlen($propsS);
-  $pMemsA = !$o->PMemsA ? : json_decode($o->PMemsA);
+  $pMemsA = !$o->PMemsA ? : json_decode($o->PMemsA, true);
   if ($nProps) {
     if ($IdsAndSubsetInfoB || $GraphicalB) {
       echo "<tr><td class=c>$foId</td><td>$fName</td>";

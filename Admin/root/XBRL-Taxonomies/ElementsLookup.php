@@ -223,7 +223,7 @@ function ElementInfo($o) {
           $firstRefB = false;
         }
         $ref = '';
-        foreach (json_decode($o->Text) as $a => $v)
+        foreach (json_decode($o->Text, true) as $a => $v)
           $ref .= "<br><span>$a</span>$v";
         $ref = substr($ref, 4);
         echo "<tr><td class=mid>$role</td><td class=Ref>$ref</td></tr>\n"; # the Ref class in an ElementsInfo table defines span {display:inline-block;width:145px}

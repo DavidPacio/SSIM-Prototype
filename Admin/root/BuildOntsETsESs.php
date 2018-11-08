@@ -282,9 +282,9 @@ foreach ($rowsA as $rowi => $row) {
 $res = $DB->ResQuery('Select Id,Data From Ontologies Where Bits>0');
 while ($o = $res->fetch_object()) {
   $OntId = (int)$o->Id;
-  $dataA = json_decode($o->Data);
+  $dataA = json_decode($o->Data, true);
   foreach ($dataA[0] as $ETypeId) {
-    $etA = json_decode($DB->StrOneQuery("Select Data from EntityTypes Where Id=$ETypeId"));
+    $etA = json_decode($DB->StrOneQuery("Select Data from EntityTypes Where Id=$ETypeId"), true);
     $etA[ETI_OntIdsA][] = $OntId;
     $DB->StQuery(sprintf("Update EntityTypes Set Data='%s' Where Id=%d", json_encode($etA, JSON_NUMERIC_CHECK), $ETypeId));
   }

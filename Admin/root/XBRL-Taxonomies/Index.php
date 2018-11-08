@@ -1,18 +1,36 @@
-<?php /*
+<?php /* SSIM Taxonomies index.php
 
 */
+
 require '../../inc/BaseSSIM.inc';
 require '../../inc/FuncsSSIM.inc';
-# $OntId  = (int)$_GET['OntId'];
-# $TxName = OntStr($OntId);
-$OntId  = 1;           # /- Temporary fudge until a session system of some sort is added
-$TxName = 'IFRS-2018'; # |
-# $urlQry = "?OntId=$OntId&TxName=$TxName";
+require '../../inc/FuncsServer.inc';
+require '../../inc/Session.inc';
+
+if (isset($_GET['OntId'])) {
+  # Have an OntId in the url as when coming from SSIM-Proto index.htm
+  $OntId  = (int)$_GET['OntId'];
+  $TxName = OntStr($OntId);
+ #SessionStart(json_encode(['OntId' => $OntId, 'TxName' => $TxName])); On deciding requires PHP 7.1 to use keys with list()
+  SessionStart(json_encode([$OntId, $TxName])); # works with the normal list
+}else{
+  # Expect a session to exist on for example a return here from running a module
+  if (is_null($jsonData = SessionOpen()))
+    SessionError();
+  #list('OntId' => $OntId, 'TxName' => $TxName) = json_decode($jsonData, true); # Requires PHP 7.1
+  #$jsonDataA = json_decode($jsonData, true);
+  #$OntId  = $jsonDataA['OntId'];
+  #$TxName = $jsonDataA['TxName'];
+  list($OntId, $TxName) = json_decode($jsonData, true);
+  $AppName = 'Admin '.$TxName;
+  #echo "OntId $OntId, TxName $TxName<br>";
+}
+
 echo <<< END
 <!DOCTYPE html>
 <html lang=en>
 <head>
-<title>SSIM Admin $TxName</title>
+<title>$TxName</title>
 <meta charset=utf-8>
 <link rel=apple-touch-icon sizes=180x180 href=../apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=../favicon-32x32.png>
@@ -62,10 +80,28 @@ span.s3 {display:inline-block;width:50px}
 </ul>
 <h2>General</h2>
 <ul>
-<li><a href='' target=_blank>New IFRS-2018 Tab</a></li>
+<li><a href='' target=_blank>New $TxName Tab</a></li>
 </ul>
 </div>
 </div>
 </body>
 </html>
 END;
+
+function SessionError() {
+echo <<< ERROREND
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Error</title>
+<link rel=stylesheet type=text/css href=../css/Site.css>
+</head>
+<body>
+<h1 class=c>SSIM Admin XBRL Taxonomy</h1>
+<p class=c>Session error. Please go back to SSIM Admin and return.<br>
+<a href=../>SSIM Admin</a></p>
+</body>
+</html>
+ERROREND;
+exit;
+}

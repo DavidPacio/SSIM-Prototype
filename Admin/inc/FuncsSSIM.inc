@@ -34,7 +34,7 @@ function OntStr($id) {
 # Returns the Name of the Entity Type with Id = $id
 function EntityTypeStr($id) {
   global $DB;
-  return $id ? json_decode($DB->StrOneQuery(sprintf('Select Data from %s.EntityTypes Where id=%d', DB_SSIM, $id)))[ETI_Name] : '';
+  return $id ? json_decode($DB->StrOneQuery(sprintf('Select Data from %s.EntityTypes Where id=%d', DB_SSIM, $id)), true)[ETI_Name] : '';
 }
 
 # EntitySizeStr($id)

@@ -5,7 +5,7 @@
 This module provides the standard version of Error() used by Ajax modules.
 It is expected to be used in conjunction with LoadFuncs.inc
 
-There is another version of Error() in ErrorSA.inc for use by Stand Aloen (non Ajax) modules.
+There is another version of Error() in ErrorSA.inc for use by Stand Alojen (non Ajax) modules.
 
 Error() logs an error and sends an error email. It may be passed an error enum or an error string.
 

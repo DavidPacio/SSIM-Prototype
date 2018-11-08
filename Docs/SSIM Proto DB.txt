@@ -12,6 +12,7 @@ Remove credits
 
 Tables
 ======
+Sessions
 Ontologies
 EntityTypes
 EntitySizes
@@ -28,6 +29,20 @@ PMembers
 BroInfo
 Zones
 */
+
+############
+## Visits ## Visits info - a simple table for a simple session system
+############
+CREATE TABLE Visits (
+  Id      smallint unsigned not null auto_increment,
+  Ip      varchar(40)       not null, # S Current IP address as determined by GetIp()
+                                      #   (max length for an ipv6 address is 39 chars 2001:0db8:0000:0000:0000:0000:1428:57ab
+  IpN     tinyint  unsigned not null, # S Current SERVER key enum for IP source as determined by GetIp()
+  Data    text              not null, # jsonised session data
+  TimeT   timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Primary Key (Id),
+          Key (Ip)
+) Charset=utf8;
 
 ################
 ## Ontologies ## Ontologies supported by Pacio

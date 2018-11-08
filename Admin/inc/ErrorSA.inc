@@ -69,20 +69,20 @@ function Error($err, $ret=0) {
     # Rollback any transaction in progress
     $DB->rollback();
     # Release lock if any
-    $DB->RelBDbLocks();
+    #$DB->RelBDbLocks();
     # Get an mysql cooperative lock to cancel any other such lock that might have been in place, and then release it again.
     # $DB->query('Select GET_LOCK("Error",5)');
     # $DB->query('Select RELEASE_LOCK("Error")');
 
-    $body .= "\n\nDB->MemId = $DB->MemId\n";
-    if ($DB->VisId) {
-      if ($o = $DB->OptObjQuery("Select * From Visits Where Id=$DB->VisId")) {
-        $body .= "Session Data:\n VisId = $DB->VisId\n MemId = $o->MemId\n LoginN = $o->LoginN\n Inst = $o->Inst\n Bits = $o->Bits\n TnS = $DB->TnS\n";
-        foreach ($DB->SessionA as $k => $v)
-          $body .= " $k = $v\n";
-      }else
-        $body .= " VisId = $DB->VisId\n";
-    }
+    # $body .= "\n\nDB->MemId = $DB->MemId\n";
+    # if ($DB->VisId) {
+    #   if ($o = $DB->OptObjQuery("Select * From Visits Where Id=$DB->VisId")) {
+    #     $body .= "Session Data:\n VisId = $DB->VisId\n MemId = $o->MemId\n LoginN = $o->LoginN\n Inst = $o->Inst\n Bits = $o->Bits\n TnS = $DB->TnS\n";
+    #     foreach ($DB->SessionA as $k => $v)
+    #       $body .= " $k = $v\n";
+    #   }else
+    #     $body .= " VisId = $DB->VisId\n";
+    # }
   }else
     $body .= $errS . "\n\n";
   foreach ($_POST as $k => $v)

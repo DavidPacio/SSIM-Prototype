@@ -47,7 +47,7 @@ while ($o = $res->fetch_object()) {
   $id    = (int)$o->Id;
   $typeN = (int)$o->TypeN;
   $bits  = (int)$o->Bits;
-  $dataA = json_decode($o->Data);
+  $dataA = json_decode($o->Data, true);
   $entityTypes = '';
   if ($dataA[SSIM_OntsDX_EntityTypesA]) {
     foreach ($dataA[SSIM_OntsDX_EntityTypesA] as $ETypeId)
@@ -140,7 +140,7 @@ while ($o = $res->fetch_object()) {
   }
   --$n;
   $id = (int)$o->Id;
-  $dataA = json_decode($o->Data); # The EntityType Data
+  $dataA = json_decode($o->Data, true); # The EntityType Data
   $ctrys = $onts = $sizes = $props = '';
   if ($dataA[ETI_CtryIdsA]) {
     foreach ($dataA[ETI_CtryIdsA] as $CtryId)

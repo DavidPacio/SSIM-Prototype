@@ -109,7 +109,7 @@ function PMemDiMesAStr($pMemDiMesA, $namesA=false) {
   #Dump('$pMemDiMesA',$pMemDiMesA);
   if ($pMemDiMesA) {
     $prefixes = 'mdxa';
-    #$pMemDiMesA = json_decode($pMemDiMesA);
+    #$pMemDiMesA = json_decode($pMemDiMesA, true);
     $r = '';
     for ($i=II_MandatsA ; $i<=II_AllowsA; ++$i)
       if (isset($pMemDiMesA[$i]) && $pMemDiMesA[$i])

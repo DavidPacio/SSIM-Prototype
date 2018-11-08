@@ -110,37 +110,39 @@ const IPS_HTTP_FORWARDED           = 7;
 # Enums for DB Tables involving master ops where the table is passed to the ee function by enum, and the enum is used in field TableN of DBLog if logging is involved.
 # The enums are also used with locks via the Status and Locks Memory tables.
 # Not for BroSets, Formats, Registry, Status, Text, Visits, VisitTrans, BDTsessions, DBLog
-const T_B_People      = 1; # /- Used in Locks table Login locks
-const T_B_Agents      = 2; # |
-const T_B_Entities    = 3; # |
-const T_B_AgentData   = 4;
-const T_B_AgentTrans  = 5;
-const T_B_EntityTrans = 6;
-const T_B_Dbos        = 7;
-const T_B_DboTrans    = 8;
-const T_B_Bros        = 9;
-const T_B_BroTrans    = 10;
-const T_B_Refs        = 11;
-const T_B_ERefs       = 12;
-const T_Sim_Regions    = 13;
-const T_Sim_Countries  = 14;
-const T_Sim_Currencies = 15;
-const T_Sim_Exchanges  = 16;
-const T_Sim_Languages  = 17;
-const T_Sim_Industries = 18;
-# djh?? Check DB_Braiins_Tables
-# DB_Braiins_Tables below is the default list of tables used by the BDB constructor. If the Braiins DB is not the Default DB and if
+#const T_B_People      = 1; # /- Used in Locks table Login locks
+#const T_B_Agents      = 2; # |
+#const T_B_Entities    = 3; # |
+#const T_B_AgentData   = 4;
+#const T_B_AgentTrans  = 5;
+#const T_B_EntityTrans = 6;
+#const T_B_Dbos        = 7;
+#const T_B_DboTrans    = 8;
+#const T_B_Bros        = 9;
+#const T_B_BroTrans    = 10;
+#const T_B_Refs        = 11;
+#const T_B_ERefs       = 12;
+#const T_Sim_Regions    = 13;
+#const T_Sim_Countries  = 14;
+#const T_Sim_Currencies = 15;
+#const T_Sim_Exchanges  = 16;
+#const T_Sim_Languages  = 17;
+#const T_Sim_Industries = 18;
+# DB_Default_Tables below is the default list of tables used by the BDB constructor. If the Default DB is not the one for the no prefix table names here and if
 # any of these tables are being used then a modified version of this string with 'DbName." prefix before table names should be passed to BDB().
-#onst DB_Braiins_Tables = ',People,Agents,Entities,AgentData,AgentTrans,EntityTrans,Bros,BroTrans,Refs,ERefs,SIM.Regions,SIM.Countries,SIM.Currencies,SIM.Exchanges,SIM.Languages';
-define ('DB_Braiins_Tables', sprintf(',People,Agents,Entities,AgentData,AgentTrans,EntityTrans,Dbos,DboTrans,Bros,BroTrans,Refs,ERefs,%s.Regions,%s.Countries,%s.Currencies,%s.Exchanges,%s.Languages,%s.Industries', DB_SSIM, DB_SSIM, DB_SSIM, DB_SSIM, DB_SSIM, DB_SSIM));
+#onst DB_Default_Tables = ',People,Agents,Entities,AgentData,AgentTrans,EntityTrans,Bros,BroTrans,Refs,ERefs,SIM.Regions,SIM.Countries,SIM.Currencies,SIM.Exchanges,SIM.Languages';
+#define ('DB_Default_Tables', sprintf(',People,Agents,Entities,AgentData,AgentTrans,EntityTrans,Dbos,DboTrans,Bros,BroTrans,Refs,ERefs,%s.Regions,%s.Countries,%s.Currencies,%s.Exchanges,%s.Languages,%s.Industries',
+#         DB_SSIM, DB_SSIM, DB_SSIM, DB_SSIM, DB_SSIM, DB_SSIM));
+# Or if the app uses tables in its default DB and table names prefixed by "DbName." for other tables, hen this can be left as NULL.
+# const DB_Default_Tables = NULL;
 
 # DBLog.TypeN Enums
-const DBLOG_Insert = 1;
-const DBLOG_Update = 2;
-const DBLOG_Incr   = 3; # Atomic increment of column
-const DBLOG_Delete = 4;
-const DBLOG_Delete_GarbageCollect = 5; # Garbage Collect
-const DBLOG_Delete_ReplaceImport  = 6; # Data deleted by a Replace type import
+#const DBLOG_Insert = 1;
+#const DBLOG_Update = 2;
+#const DBLOG_Incr   = 3; # Atomic increment of column
+#const DBLOG_Delete = 4;
+#const DBLOG_Delete_GarbageCollect = 5; # Garbage Collect
+#const DBLOG_Delete_ReplaceImport  = 6; # Data deleted by a Replace type import
 
 # Field Types re checking/cleaning data from client
 # -----------
@@ -160,21 +162,21 @@ const FT_TEXTAREA =  7;
 # Pages pageN/100 -> AppN
 # =====
 # Admin
-const PG_Admin  = 100; # Admin (all)
+#const PG_Admin  = 100; # Admin (all)
 
 # Site
-const PG_B_HP       = 201; # Braiins Home Page
-const PG_B_About    = 202; #         About Us
-const PG_B_Contact  = 203; #         Contact Us
-const PG_B_FAQs     = 204; #         FAQs
-const PG_B_FnB      = 205; #         Features and Benefits
-const PG_B_Policies = 206; #         Policies
-const PG_B_Sitemap  = 207; #         Sitemap
-const PG_B_ToS      = 208; #         Terms of Service
-const PG_B_Register = 209; #         Register
-const PG_B_Trial    = 210; #         Free Trial
-const PG_B_Prices   = 211; #         Prices
-const PG_D_BDT      = 301; # BDT
+#const PG_B_HP       = 201; # Braiins Home Page
+#const PG_B_About    = 202; #         About Us
+#const PG_B_Contact  = 203; #         Contact Us
+#const PG_B_FAQs     = 204; #         FAQs
+#const PG_B_FnB      = 205; #         Features and Benefits
+#const PG_B_Policies = 206; #         Policies
+#const PG_B_Sitemap  = 207; #         Sitemap
+#const PG_B_ToS      = 208; #         Terms of Service
+#const PG_B_Register = 209; #         Register
+#const PG_B_Trial    = 210; #         Free Trial
+#const PG_B_Prices   = 211; #         Prices
+#const PG_D_BDT      = 301; # BDT
 
 # Time and DATE constants
 # -----------------------
@@ -185,7 +187,7 @@ const HOUR   =    3600;
 #onst HOURS6 =   21600;
 #onst HOURS8 =   28800;
 const DAY    =   86400;
-const CENTURY_BREAK_2DIGIT_YEAR = 15; # Used by eeYmdToD() re 2 digit years. > CENTURY_BREAK_2DIGIT_YEAR -> + 1900
+const CENTURY_BREAK_2DIGIT_YEAR = 25; # Used by eeYmdToD() re 2 digit years. > CENTURY_BREAK_2DIGIT_YEAR -> + 1900
                                       #                                     <= CENTURY_BREAK_2DIGIT_YEAR -> + 2000
                                       # Should be rolled forward as the century advances. Could make this automatic...
 

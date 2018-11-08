@@ -11,7 +11,6 @@ $AppAid = 'Admin';
 require 'Constants.inc';
 $AppEnum = APP_Admin;
 $AppName = 'Pacio SSIM Proto Admin SSIM';
-const DB_Default = DB_SSIM;
 
 define('LOG_FILE', Root_Path."Logs/$AppAid.log");
 
@@ -24,5 +23,5 @@ require 'Funcs.inc';
 # No server or session funcs
 # No Globals
 
-$DB = new BDB();
+$DB = new BDB(DB_SSIM);
 
