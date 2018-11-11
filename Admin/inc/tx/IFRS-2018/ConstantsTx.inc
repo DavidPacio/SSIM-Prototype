@@ -2,8 +2,6 @@
 
 XBRL IFRS 2018 taxonomy specific stuff
 
-Actually nothing as of 2018.11.08
-
 Plus currently unused stuff from the 2013 work
 
 Plus some counts and comments on IFRS 2018
@@ -14,8 +12,10 @@ https://www.ifrs.org/-/media/feature/standards/taxonomy/2018/ifrs-taxonomy-illus
 History:
 2018.10.27 Started
 2018.11.08 DimId_Max and HyId_Max taken OoS
+2018.11.11 TARId_LastDeclarationArcole added
 */
 
+const TARId_LastDeclarationArcole = TARId_EssenceAlias;
 
 # DiMeIds
 # const DiMeId_PyaAmount           =  23;
@@ -143,33 +143,33 @@ due to roles presumably
 
 /*
 IFRS 2018 numbers:
-Arcs with ArcroleId  =                                       FromId             ToId
-  TARId_HypercubeDim 1:  285  Hypercubes -> Dimensions       Hypercube el Id    Dimension el Id
-  TARId_DimDomain    2:  291  First Dimension members        Dimension el Id    DiMe el Id - not 131 because of different roles. If Dimensions table used only one role per dim then there would be 291 dima rather than 131.
-  TARId_DomainMember 3: 2897  From domain contains To member Domain    el Id    Member el Id           - vs 1452 found in building DiMes
-  TARId_DimAll       4:  150  One for each Hypercube         Abstract El Id     Hypercube el Id e.g. Earnings per share [abstract] -> Earnings per share [table]. Not 146 because of 4 with 2 roles.
-  TARId_DimNotAll    5:    0  Not used
-  TARId_DimDefault   6:  131  From dimension To default dimension member Dimension el Id    Dimension member el Id Same # as # of Elements with TesgN = TESGN_Dimension = all dimensions have a default
+Arcs with ArcroleId  =                                     FromId             ToId
+  TARId_HypercubeDim:  285  Hypercubes -> Dimensions       Hypercube el Id    Dimension el Id
+  TARId_DimDomain   :  291  First Dimension members        Dimension el Id    DiMe el Id - not 131 because of different roles. If Dimensions table used only one role per dim then there would be 291 dima rather than 131.
+  TARId_DomainMember: 2897  From domain contains To member Domain    el Id    Member el Id           - vs 1452 found in building DiMes
+  TARId_DimAll      :  150  One for each Hypercube         Abstract El Id     Hypercube el Id e.g. Earnings per share [abstract] -> Earnings per share [table]. Not 146 because of 4 with 2 roles.
+  TARId_DimNotAll   :    0  Not used
+  TARId_DimDefault  :  131  From dimension To default dimension member Dimension el Id    Dimension member el Id Same # as # of Elements with TesgN = TESGN_Dimension = all dimensions have a default
 
 TARId_DomainMember numbers:
-select * from Arcs where ArcroleId=3 Order by FromId,ToId,PRoleId
+select * from Arcs where ArcroleId=9 Order by FromId,ToId,PRoleId
 2897 results starting as below but only roughly half of these (1452) are dimension members. The others are for notes blocks but not in hypercube/dimension form.
 Id   TltN  FromId ToId PRoleId ArcroleId ArcOrder
- 9956   1   21    22   51      3         10000000
-10229   1   21    22   53      3         10000000
-12256   1   21    22   82      3         10000000
-12324   1   21    22   83      3         10000000
-12675   1   21    22   86      3         10000000
-12882   1   21    22   87      3         10000000
- 9974   1   21    27   51      3         20000000
-10234   1   21    27   53      3         20000000
-12271   1   21    27   82      3         20000000
-12338   1   21    27   83      3         20000000
-12686   1   21    27   86      3         20000000
-12894   1   21    27   87      3         20000000
-17981   1   33    32   147     3         50000000
+ 9956   1   21    22   51      9         10000000
+10229   1   21    22   53      9         10000000
+12256   1   21    22   82      9         10000000
+12324   1   21    22   83      9         10000000
+12675   1   21    22   86      9         10000000
+12882   1   21    22   87      9         10000000
+ 9974   1   21    27   51      9         20000000
+10234   1   21    27   53      9         20000000
+12271   1   21    27   82      9         20000000
+12338   1   21    27   83      9         20000000
+12686   1   21    27   86      9         20000000
+12894   1   21    27   87      9         20000000
+17981   1   33    32   147     9         50000000
 
-select * from Arcs where ArcroleId=3 group by FromId Order by FromId
+select * from Arcs where ArcroleId=9 group by FromId Order by FromId
 gives 579 results as also does:
 select * from Elements where Id in (select FromId from Arcs where ArcroleId=3) order by Id
 
@@ -210,10 +210,10 @@ gives 433
 select * from Arcs where ArcroleId=6 and ToId not in (select ToId from Arcs where ArcroleId=2)
 -> zero i.e. all default members are in TARId_DimDomain
 
-select * from Arcs where ArcroleId=3 TARId_DomainMember
+select * from Arcs where ArcroleId=9 TARId_DomainMember
 Id  TltN FromId  ToId  PRoleId ArcroleId ArcOrder  ArcUseN priority  Weight  PrefLabelRoleId ClosedB ContextN  UsableB TargetRoleId  FileId
-1   2     4526    4157  19      3         10000000  NULL  NULL  NULL  NULL  NULL  NULL  NULL  NULL  56
-2   2     3025    2699  19      3         10000000  NULL  NULL  NULL  NULL  NULL  NULL  NULL  NULL  56
+1   2     4526    4157  19     9         10000000  NULL  NULL  NULL  NULL  NULL  NULL  NULL  NULL  56
+2   2     3025    2699  19     9         10000000  NULL  NULL  NULL  NULL  NULL  NULL  NULL  NULL  56
 
 
 select * from Elements where Id in (4526, 4157)

@@ -14,7 +14,7 @@ Fix constants...
 */
 require '../../inc/BaseTx.inc';
 require '../../inc/tx/ConstantsTx.inc';
-require "../../inc/tx/$TxName/ConstantsTx.inc"; # taxonomy specific stuff
+#equire "../../inc/tx/$TxName/ConstantsTx.inc"; # taxonomy specific stuff
 
 Head("Hypercubes List $TxName", true);
 

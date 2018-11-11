@@ -62,11 +62,6 @@ $NumDiMes = $dimId = 0;
 $DimsA       = []; # [dimId => [dimElId, roleId]]
 $DimsByRoleA = []; # [roleId => [X => dimId]]
 $DiMesA      = []; # [dimId => [level => [X => [elId, n]]]
-
-# B code did both TARId_DimDefault and TARId_DimDomain in this loop but in IFRS TARId_DimDefault had a different role - role 17
-# Here use just TARId_DimDomain (From dimension To first dimension member of the dimension) and then to come back later to do the defaults with role ignored
-#                             Select A.* From Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=2 and A.ArcroleId=2 Order by A.FromId,A.PRoleId /- same ie the TesgN=2 is redundant as all TARId_DimDomain ArcroleId
-#                             Select A.* From Arcs A Join Elements E on E.Id=A.FromId Where A.ArcroleId=2 Order by A.FromId,A.PRoleId               |  arcs are TesgN TESGN_Dimension 2 ones
 $res = $DB->ResQuery(sprintf('Select A.*,E.name From Arcs A Join Elements E on E.Id=A.FromId Where A.ArcroleId=%d Order by A.FromId,A.PRoleId', TARId_DimDomain));
 # Gives 291 for IFRS rather than 131, the number of TESGN_Dimension elements and also the number of TARId_DimDefault arcs, because of multiple roles per dimension
 # Treat each as a dimension + 291 dimensions
@@ -163,18 +158,6 @@ echo "<br>$numDims dimensions and $NumDiMes dimension members added in $loop loo
 # 291 dimensions and 1452 dimension members added in 4 loops
 #
 # Done in 38 msecs
-
-# # Set the default Dimension Members
-# # djh?? add check on these updates working
-# # TARId_DimDefault  From dimension To default dimension member FromId: Dimension el Id  ToId: Dimension member el Id
-# $updateQryS = sprintf('Update DimensionMembers2 M Join Dimensions D on M.DimId = D.Id Set Bits=%d Where D.ElId=%%d and M.ElId=%%d', DiMeB_Default); # can just set Bits for now as DiMeB_Default is the only bit currently in use
-# $res = $DB->ResQuery(sprintf('Select FromId,ToId From Arcs Where ArcroleId=%d', TARId_DimDefault));
-# while ($o = $res->fetch_object()) {
-#   # echo sprintf($updateQryS, (int)$o->FromId, (int)$o->ToId).BRNL;
-#   # Update DimensionMembers Set Bits=1 Where DimId=866 and ElId=4526
-#   $DB->StQuery(sprintf($updateQryS, (int)$o->FromId, (int)$o->ToId));
-# }
-# echo "<br>$res->num_rows default dimension members set<br>";
 
 # DumpExport('$DimsA', $DimsA);
 # echo "<br><br>";

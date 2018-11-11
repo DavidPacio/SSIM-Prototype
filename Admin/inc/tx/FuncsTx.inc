@@ -24,10 +24,10 @@ function ElName($id) {
   return $DB->StrOneQuery("Select name From Elements Where Id=$id");
 }
 
-function Text($id) {
-  global $DB;
-  return $id ? $DB->StrOneQuery("Select Text from Text where Id=$id") : '';
-}
+#function Text($id) {
+#  global $DB;
+#  return $id ? $DB->StrOneQuery("Select Text from Text where Id=$id") : '';
+#}
 
 function Role($id, $appendIdB=true) {
   global $DB;

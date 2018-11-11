@@ -27,7 +27,6 @@ const TAFTT_Label   = 2; # Arc         To is a label resource      -            
 const TAFTT_Ref     = 3; # Arc         To is a reference resource  -                    TLTN_Reference  | TLTN_GenLink |           = 8 TARId_ElementRef
 const TAFTT_Role    = 4; # Arc From       is a role                TLTN_GenLink  -
 
-
 require '../../inc/BaseTx.inc';
 require '../../inc/tx/ConstantsTx.inc';
 require "../../inc/tx/$TxName/BuildTxDB.inc"; # taxonomy specific stuff
@@ -47,7 +46,7 @@ FORM;
   exit;
 }
 
-# set_time_limit(60); was taking 133 secs to run for IFRS 2018 anyway but this is only script time not DB etc time on Linux.
+set_time_limit(120); # was taking 133 secs to run for IFRS 2018 anyway but this is only script time not DB etc time on Linux.
 
 # Type      Name ends with capital letter
 # ----
@@ -67,7 +66,7 @@ $NsMA       = # [namespace   => [NsId, Prefix, FileIds, Num]
 #NamesMI    = # [NsId.name   =>  ElId]
 $XidsMI     = # [xidS  => ElId]  Not written to a table
 #TextMA     = # [Text  => [TextId, Uses]]
-$LinkbasesA = []; # [X => location]
+$LinkbasesMA = []; # [location => 1]
 
 $tablesA = [
   'Arcroles',
@@ -128,38 +127,43 @@ unset($rolesA);
 
 # Add the XBRL Arcroles to get them in the desired Id order to match the TARId_ constants which are in TLTN_ sequence, with Pacio short definition added
 
-# Taxonomy Arcrole Id (Arcroles.Id) constants which are in TLTN_ sequence
-# -------------------                                 /- TLTN_* arc (link) type
-#onst TARId_HypercubeDim  =  1; # hypercube-dimension 1  From hypercube To dimension in the hypercube               Source (a hypercube) contains the target (a dimension) among others.
-#onst TARId_DimDomain     =  2; # dimension-domain    1  From dimension To first dimension member of the dimension  Source (a dimension) has only the target (a domain) as its domain.
-#onst TARId_DomainMember  =  3; # domain-member       1  From domain contains To member                             Source (a domain) contains the target (a member).
-#onst TARId_DimAll        =  4; # all                 1  From source requires dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) to appear in the context of the primary item.
-#onst TARId_DimNotAll     =  5; # notAll              1  From source excludes dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) not to appear in the context of the primary item.
-#onst TARId_DimDefault    =  6; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
-#onst TARId_ParentChild   =  7; # parent-child        2  From parent To child
-#onst TARId_SummationItem =  8; # summation-item      3  From element sums To element
-#onst TARId_ConceptLabel  =  9; # concept-label       4  From element has To label
-#onst TARId_ConceptRef    = 10; # concept-reference   5  From element has To reference
-#onst TARId_ElementLabel  = 11; # element-label       6  From element has To label
-#onst TARId_ElementRef    = 12; # element-reference   6  From element has To reference
-
+# # Taxonomy Arcrole Id (Arcroles.Id) constants which are in descending TLTN_ order because of US GAAP adding lots more declaration ones
+# # -------------------                                 /- TLTN_* arc (link) type
+# const TARId_ElementRef    =  1; # element-reference   6  From element has To reference
+# const TARId_ElementLabel  =  2; # element-label       6  From element has To label
+# const TARId_ConceptRef    =  3; # concept-reference   5  From element has To reference
+# const TARId_ConceptLabel  =  4; # concept-label       4  From element has To label
+# const TARId_SummationItem =  5; # summation-item      3  From element sums To element
+# const TARId_ParentChild   =  6; # parent-child        2  From parent To child
+# const TARId_FirstDeclarationArcole = 7; #             1
+# const TARId_HypercubeDim  =  7; # hypercube-dimension 1  From hypercube To dimension in the hypercube               Source (a hypercube) contains the target (a dimension) among others.
+# const TARId_DimDomain     =  8; # dimension-domain    1  From dimension To first dimension member of the dimension  Source (a dimension) has only the target (a domain) as its domain.
+# const TARId_DomainMember  =  9; # domain-member       1  From domain contains To member                             Source (a domain) contains the target (a member).
+# const TARId_DimAll        = 10; # all                 1  From source requires dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) to appear in the context of the primary item.
+# const TARId_DimNotAll     = 11; # notAll              1  From source excludes dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) not to appear in the context of the primary item.
+# const TARId_DimDefault    = 12; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
+# const TARId_EssenceAlias  = 13; # essence-alias       1  To is Alias of From used by US GAAP for one of their deprecated series of arcroles
+# #onst TARId_DepConcepts   = 14; # dep-aggregateConcept-deprecatedPartConcept 1 From aggregate concept To deprecated part concept'], etc added by build for US GAAP
+# #onst TARId_LastDeclarationArcole = xx; #             1  Defined in /inc/tx/TxName/ConstantsTx.inc; # taxonomy specific stuff
 $arcrolesA = [
-  ['hypercube-dimension', 'From hypercube To dimension in the hypercube'],
-  ['dimension-domain',    'From dimension To first dimension member of the dimension'],
-  ['domain-member',       'From domain contains To member'],
-  ['all',                 'From source requires dimension members in the To hypercube'],
-  ['notAll',              'From source excludes dimension members in the To hypercube - not used'],
-  ['dimension-default',   'From dimension To default dimension member'],
-  ['parent-child',        'From parent To child'],
-  ['summation-item',      'From element sums To element'],
-  ['concept-label',       'From element has To label'],
-  ['concept-reference',   'From element has To reference'],
-  ['element-label',       'From element has To label'],
-  ['element-reference',   'From element has To reference']
+  ['element-reference',   TLTN_GenLink,      'From element has To reference'],
+  ['element-label',       TLTN_GenLink,      'From element has To label'],
+  ['concept-reference',   TLTN_Reference,    'From element has To reference'],
+  ['concept-label',       TLTN_Label,        'From element has To label'],
+  ['summation-item',      TLTN_Calculation,  'From element sums To element'],
+  ['parent-child',        TLTN_Presentation, 'From parent To child'],
+  ['hypercube-dimension', TLTN_Definition,   'From hypercube To dimension in the hypercube'],
+  ['dimension-domain',    TLTN_Definition,   'From dimension To first dimension member of the dimension'],
+  ['domain-member',       TLTN_Definition,   'From domain contains To member'],
+  ['all',                 TLTN_Definition,   'From source requires dimension members in the To hypercube'],
+  ['notAll',              TLTN_Definition,   'From source excludes dimension members in the To hypercube - not used'],
+  ['dimension-default',   TLTN_Definition,   'From dimension To default dimension member'],
+  ['essence-alias',       TLTN_Definition,   'To is Alias of From']
 ];
-$id=0;
+
+$ArcroleId=0;
 foreach ($arcrolesA as $arcroleA) # [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
-  $ArcRolesMA[$arcroleA[0]] = ['Id' => ++$id, 'usedOnN' => NULL, 'definition' => NULL, 'PacioDef' => $arcroleA[1], 'cyclesAllowed' => NULL, 'FileIds' => NULL, 'Uses' => 0];
+  $ArcRolesMA[$arcroleA[0]] = ['Id' => ++$ArcroleId, 'usedOnN' => $arcroleA[1], 'definition' => NULL, 'PacioDef' => $arcroleA[2], 'cyclesAllowed' => NULL, 'FileIds' => NULL, 'Uses' => 0];
 unset($arcrolesA);
 
 $XR = new XMLReader();
@@ -202,7 +206,7 @@ Schema($entryPointUrl);
 echo '<br><b>Importing Linkbases</b><br>';
 $FileId = $MaxSchemaId;
 $LinkbaseId = 0;
-foreach ($LinkbasesA as $href) {
+foreach ($LinkbasesMA as $href => $t) {
   $LinkbaseId++;
   $FileId++;
   $File   = $href;
@@ -240,8 +244,8 @@ foreach ($LinkbasesA as $href) {
           if ($o = $DB->OptObjQuery("Select Id,FileIds From Imports where Location='$loc'"))
             $DB->StQuery("Update Imports Set Num=Num+1,FileIds='".$o->FileIds.','.$FileId."' Where Id=$o->Id");
           else
-            DieNow("Schema $loc referenced in the schemaLocation of &lt;link:linkbase at node $NodeX of LinkbaseId $LinkbaseId $File has not been imported"); # http://www.xbrl.org/2006/ref-2006-02-27.xsd
-            # Die - Schema http://www.xbrl.org/2006/ref-2006-02-27.xsd referenced in the schemaLocation of <link:linkbase at node 0 of LinkbaseId 9 http://xbrl.ifrs.org/taxonomy/2018-03-16/full_ifrs/dimensions/gre_full_ifrs-dim_2018-03-16.xml has not been imported
+           #DieNow("Schema $loc referenced in the schemaLocation of &lt;link:linkbase at node $NodeX of LinkbaseId $LinkbaseId $File has not been imported"); # http://www.xbrl.org/2006/ref-2006-02-27.xsd
+            echo "Schema $loc referenced in the schemaLocation of &lt;link:linkbase at node $NodeX of LinkbaseId $LinkbaseId $File has not been imported<br>";
         }
         break;
       case 'xml:lang':
@@ -285,9 +289,12 @@ echo "Roles inserted.<br>";
 # Insert the Arcroles
 # $ArcRolesMA [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
 foreach ($ArcRolesMA as $arcrole => $arcroleA) {
-  $set = "Arcrole='$arcrole',PacioDef='$arcroleA[PacioDef]',UsedOnN=$arcroleA[usedOnN],Uses=$arcroleA[Uses],FileIds='$arcroleA[FileIds]'";
+  $set = "Arcrole='$arcrole',UsedOnN=$arcroleA[usedOnN]";
+  if ($arcroleA['PacioDef'])      $set .= ",PacioDef='$arcroleA[PacioDef]'";
   if ($arcroleA['definition'])    $set .= ",definition='$arcroleA[definition]'";
   if ($arcroleA['cyclesAllowed']) $set .= ",cyclesAllowed='$arcroleA[cyclesAllowed]'";
+  if ($arcroleA['FileIds'])       $set .= ",FileIds='$arcroleA[FileIds]'";
+  if ($arcroleA['Uses'])          $set .= ",Uses=$arcroleA[Uses]";
   $id = $DB->InsertQuery("Insert Arcroles Set $set");
   if ($id != $arcroleA['Id']) DieNow("Id $id on Arcrole Insert not $arcroleA[Id] as expected");
 }
@@ -367,7 +374,7 @@ function Schema($loc, $reentrantB=false) {
     // Stack the previous schema being processed
     array_push($sSchemaStackA, [$SchemaId, $File, $NodeX, $NumNodes, $NodesA]);
     $sStackDepth++;
-    echo "Schema $SchemaId Node $NodeX stacked, depth $sStackDepth<br>";
+    echo "Schema $SchemaId node $NodeX stacked, depth $sStackDepth<br>";
     #for ($j=0; $j<$sStackDepth; $j++) {
     #  echo "Schema Stack $j SchemaId: {$sSchemaStackA[$j][0]}<br>";
     #  echo "Schema Stack $j File: {$sSchemaStackA[$j][1]}<br>";
@@ -398,7 +405,7 @@ function Schema($loc, $reentrantB=false) {
   foreach ($node['attributes'] as $a => $v) {
     if (strpos($a, 'xmlns') === 0) { # namespace
       AddNamespace($a, $v);    # 'xmlns' => 'http://www.w3.org/2001/XMLSchema',
-      continue;                # 'xmlns:uk-gaap-all' => 'http://www.xbrl.org/uk/gaap/core-all',
+      continue;             # 'xmlns:uk-gaap-all' => 'http://www.xbrl.org/uk/gaap/core-all',
     }
     if (!strlen($v)) {
       echo "Ignoring empty attribute '$a' in NodeX $NodeX in Schema $File <br>";
@@ -408,12 +415,12 @@ function Schema($loc, $reentrantB=false) {
   }
   # if ($SchemaId != Insert('Schemas', $set)) DieNow("SchemaId $SchemaId != insert Id");
   while (++$NodeX < $NumNodes) {
-    # DumpExport("Node $NodeX", $NodesA[$NodeX]);
+    #DumpExport("Node $NodeX of $NumNodes", $NodesA[$NodeX]);
     switch (StripPrefix($NodesA[$NodeX]['tag'])) {
       case 'annotation':
         while (($NodeX+1) < $NumNodes && $NodesA[$NodeX+1]['depth'] > 1) { # <annotation has a depth of 1
           $NodeX++;
-          # DumpExport("Node $NodeX", $NodesA[$NodeX]);
+          # DumpExport("Node $NodeX of $NumNodes", $NodesA[$NodeX]);
           switch (StripPrefix($NodesA[$NodeX]['tag'])) {
             case 'appinfo':
               while (($NodeX+1) < $NumNodes && $NodesA[$NodeX+1]['depth'] > 2) { # <appinfo has a depth of 2
@@ -439,6 +446,7 @@ function Schema($loc, $reentrantB=false) {
       case 'element':        Element($nsId); break;
       case 'import':
         # <import namespace="http://www.xbrl.org/2003/XLink" schemaLocation="xl-2003-12-31.xsd"/>
+        # <xs:import namespace="http://fasb.org/stm/com/2018-01-31" schemaLocation="../stm/us-gaap-stm-com-2018-01-31.xsd"/>
         $node = $NodesA[$NodeX];
         $ns  = $node['attributes']['namespace'];
         $loc = $node['attributes']['schemaLocation'];
@@ -461,7 +469,7 @@ function Schema($loc, $reentrantB=false) {
     #}
     $sStackDepth--;
     list($SchemaId, $File, $NodeX, $NumNodes, $NodesA) = array_pop($sSchemaStackA);
-    echo "Back to Schema $SchemaId Node $NodeX<br>";
+    echo "Back to Schema $SchemaId node $NodeX of $NumNodes nodes<br>";
     $FileId = $SchemaId;
   }
 } // End Schema()
@@ -474,7 +482,7 @@ function Element($nsId) {
   $node = $NodesA[$NodeX];
   $depth = $node['depth'];
   $set = "NsId='$nsId'";
-  $name = $xidS = $TesgN = $tuple = 0; # $tuple is set to '$nsId.$name' for the tuple case for passing to ComplexType()
+  $name = $xidS = $TesgN = 0; # $tuple = 0; # $tuple is set to '$nsId.$name' for the tuple case for passing to ComplexType()
   foreach ($node['attributes'] as $a => $v) {
     switch ($a) {
       case 'id':   $xidS = $v; continue 2; # SetIdDef($xidS=$v, $set); continue 2; # IdId
@@ -482,29 +490,42 @@ function Element($nsId) {
       case 'type':
         $a = 'TetN';
         switch ($v) {
-          # djh?? Check all of the ones below
-          case 'xbrli:monetaryItemType':   $v = TETN_Money; break;
-          case 'string':
-          case 'xbrli:stringItemType':     $v = TETN_String; break;
-         #case 'xbrli:booleanItemType':    $v = TETN_Boolean;break;
-          case 'xbrli:dateItemType':       $v = TETN_Date;   break;
+          case 'xbrli:integerItemType':    $v = TETN_Integer; break;
+          case 'xbrli:positiveIntegerItemType': $v = TETN_PositiveInteger; break;
+          case 'xbrli:monetaryItemType':        $v = TETN_Money; break;
           case 'decimal':
           case 'xbrli:decimalItemType':    $v = TETN_Decimal; break;
-         #case 'xbrli:integerItemType':    $v = TETN_Integer; break;
           case 'xbrli:nonZeroDecimal':     $v = TETN_NonZeroDecimal; break;
+          case 'string':
+          case 'xs:string':                                           # used by US GAAP
+          case 'xbrli:normalizedStringItemType':                      # used by US GAAP
+          case 'xbrli:stringItemType':     $v = TETN_String;   break;
+          case 'xbrli:booleanItemType':    $v = TETN_Boolean;  break;
+          case 'xs:date':                                             # used by US GAAP
+          case 'xbrli:dateUnion':                                     # union of xsd:date and xsd:dateTime
+          case 'xbrli:dateItemType':       $v = TETN_Date;     break;
+          case 'xbrli:gMonthDayItemType':  $v = TETN_MonthDay; break;
+          case 'xbrli:gYearItemType':      $v = TETN_Year;     break;
+          case 'xs:gYearMonth':                                       # used by US GAAP
+          case 'xbrli:gYearMonthItemType': $v = TETN_YearMonth;break;
+          case 'xbrli:durationItemType':   $v = TETN_Duration; break;
           case 'xbrli:sharesItemType':     $v = TETN_Share;    break;
-          case 'num:perShareItemType':     $v = TETN_PerShare; break;
-          case 'num:percentItemType':      $v = TETN_Percent;  break;
           case 'num:areaItemType':         $v = TETN_Area;     break;
+          case 'num:energyItemType':       $v = TETN_Energy;   break;
+          case 'num:massItemType':         $v = TETN_Mass;     break;
+          case 'num:percentItemType':      $v = TETN_Percent;  break;
+          case 'num:perShareItemType':     $v = TETN_PerShare; break;
+          case 'num:volumeItemType':       $v = TETN_Volume;   break;
           case 'nonnum:domainItemType':    $v = TETN_DomainItem; break;
           case 'nonnum:textBlockItemType': $v = TETN_TextBlock;  break;
           case 'xbrli:pureItemType':       $v = TETN_PureItem; break;
-          case 'anyURI':                   $v = TETN_Uri;    break;
-         #case 'xbrli:anyURIItemType':     $v = TETN_Uri;    break;
-          case 'anyType':                  $v = TETN_Any;   break;
-          case 'QName':                    $v = TETN_QName; break;
-          case 'xl:arcType':               $v = TETN_Arc;   break;
-          case 'xl:documentationType':     $v = TETN_Doc;   break;
+          case 'xs:anyURI':                                           # used by US GAAP
+          case 'anyURI':                   $v = TETN_Uri;      break;
+          case 'xbrli:anyURIItemType':     $v = TETN_Uri;      break;
+          case 'anyType':                  $v = TETN_Any;      break;
+          case 'QName':                    $v = TETN_QName;    break;
+          case 'xl:arcType':               $v = TETN_Arc;      break;
+          case 'xl:documentationType':     $v = TETN_Doc;      break;
           case 'xl:extendedType':          $v = TETN_Extended; break;
           case 'xl:locatorType':           $v = TETN_Locator;  break;
           case 'xl:resourceType':          $v = TETN_Resource; break;
@@ -513,6 +534,42 @@ function Element($nsId) {
           case 'xl:titleType':             $v = TETN_Title;  break;
           case 'gen:genericArcType':       $v = TETN_GenArc; break;
           case 'gen:linkTypeWithOpenAttrs':$v = TETN_Link; break;
+          # US GAAP ones from http://xbrl.sec.gov/dei/2018/dei-2018-01-31.xsd
+          case 'dei:centralIndexKeyItemType':       $v = TETN_IndexKey;       break;
+          case 'dei:countryItemType':               $v = TETN_CountryCode;    break;
+          case 'dei:currencyItemType':              $v = TETN_CurrencyCode;   break;
+          case 'dei:fileNumberItemType':            $v = TETN_FileNumber;     break;
+          case 'dei:filerCategoryItemType':         $v = TETN_FilerCategory;  break;
+          case 'dei:fiscalPeriodItemType':          $v = TETN_FiscalPeriod;   break;
+          case 'dei:invCompanyType':                $v = TETN_InvCompanyCode; break;
+          case 'dei:legalEntityIdentifierItemType': $v = TETN_LegalEntityIdentifier; break;
+          case 'dei:nineDigitItemType':             $v = TETN_NineDigitCode;  break;
+          case 'dei:submissionTypeItemType':        $v = TETN_SubmissionType; break;
+          case 'us-types:yesNoItemType':
+          case 'dei:yesNoItemType':                 $v = TETN_YesNo;          break;
+          # US GAAP one from http://xbrl.sec.gov/invest/2013/invest-2013-01-31.xsd
+          case 'invest:foreignCurrencyContractTransactionItemType': $v = TETN_BuySell; break; # Enumeration: "Buy" or "Sell"
+          # US GAAP one from http://xbrl.fasb.org/srt/2018/elts/srt-2018-01-31.xsd
+          case 'srt-types:extensibleListItemType':  $v = TETN_ExtensibleList; break;
+          # US GAAP us-types
+          case 'us-types:gYearListItemType':             $v = TETN_YearList;   break;
+          case 'us-types:perUnitItemType':               $v = TETN_PerUnit;        break;
+          case 'us-types:threeDigitItemType':            $v = TETN_ThreeDigits;    break;
+          case 'us-types:nineDigitItemType':             $v = TETN_NineDigits;     break;
+          case 'us-types:authorizedUnlimitedItemType':   $v = TETN_AuthorizedUnlimited; break;
+          case 'us-types:flowItemType':                  $v = TETN_FlowRate;   break;
+          case 'us-types:distributionsReceivedApproach': $v = TETN_DistributionsReceivedApproach; break; # Enumeration "Cumulative earnings", "Nature of distribution"
+          case 'us-types:interestRateItemType':          $v = TETN_InterestRateType; break; #  Enumeration "Floating", "Fixed"
+          case 'us-types:restrictedInvestmentItemType':  $v = TETN_RestrictedInvestmentType; break; #  Enumeration "Restricted Investment", "Restricted Investment Exempt from Registration", "Restricted Investment Not Exempt from Registration"
+          case 'us-types:investmentPledgedItemType':     $v = TETN_InvestmentPledgedType;    break; #  Enumeration "Investment Pledged", "Entire Investment Pledged", "Partial Investment Pledged"
+          case 'us-types:investmentOnLoanForShortSalesItemType': $v = TETN_InvestmentOnLoanForShortSalesType; break; # Enumeration "Investment on Loan", "Entire Investment on Loan", "Partial Investment on Loan"
+          case 'us-types:MalpracticeInsurance-OccurrenceOrClaims-madeItemType': $v = TETN_MalpracticeInsuranceClaimsMadeType; break; # Enumeration for "Occurrence", "Claims-made"
+          case 'us-types:fundedStatusItemType':          $v = TETN_FundedStatus; break; # Enum for "Less than 65 percent", "Between 65 and less than 80 percent", "At least 80 percent", "NA"
+          case 'us-types:fundingImprovementAndRehabilitationPlanItemType': $v = TETN_FundingImprovementAndRehabilitationPlanType; break; # Enum "No", "Pending", "Implemented", "Other", "NA"
+          case 'us-types:zoneStatusItemType':            $v = TETN_ZoneStatus; break; # Enum "Green", "Yellow", "Orange", "Red", "Other", "NA"
+          case 'us-types:surchargeItemType':             $v = TETN_SurchargeType; break; # Enum "No", "Yes", "NA"
+          case 'us-types:forfeitureMethod':              $v = TETN_ForfeitureMethod; break; # Enum "Estimating expected forfeitures", "Recognizing forfeitures when they occur"
+
           default: DieNow("unknown element type $v");
         }
         break;
@@ -529,7 +586,7 @@ function Element($nsId) {
           case 'xl:locator'          : $v = TESGN_Locator;  break;
           case 'xl:resource'         : $v = TESGN_Resource; break;
           case 'xl:simple'           : $v = TESGN_Simple;   break;
-          case 'xbrli:tuple'         : $v = TESGN_Tuple; $tuple="$nsId.$name"; break;
+          #ase 'xbrli:tuple'         : $v = TESGN_Tuple; $tuple="$nsId.$name"; break;
           default: DieNow("unknown element substitutionGroup $v");
         }
         $TesgN = $v;
@@ -560,8 +617,12 @@ function Element($nsId) {
         # IFRS versioning attribute www.eurofiling.info/.../HPhilippXBRLVersioningForIFRSTaxonomy.ppt
         # Skipped as at 28.06.13
         continue 2;
+      # <xs:element name="NameChangeEventDateAxis" id="dei_NameChangeEventDateAxis" type="xbrli:stringItemType" xbrli:periodType="duration" abstract="true" nillable="true" substitutionGroup="xbrldt:dimensionItem" xbrldt:typedDomainRef="#dei_eventDateTime"/>
+      case 'xbrldt:typedDomainRef':
+        $a = 'typedDomainRef';
+        break;
       default:
-        DieNow("unknown attribute $a");
+        DieNow("unknown element attribute $a");
     }
     $set .= ",$a='$v'";
   }
@@ -569,13 +630,15 @@ function Element($nsId) {
     switch ($NodesA[++$NodeX]['tag']) {
       case 'annotation':    break; # / - skip as spec says not required to show doc other than via labels
       case 'documentation': break; # |
-      case 'complexType':   ComplexType($tuple); break; # $set .= (',ComplexTypeId=' . ComplexType()); break;
+      #ase 'complexType':   ComplexType($tuple); break; # $set .= (',ComplexTypeId=' . ComplexType()); break;
+      case 'complexType':   ComplexType(); break; # $set .= (',ComplexTypeId=' . ComplexType()); break;
       case 'simpleType':    SimpleType();  break; # $set .= (',SimpleTypeId='  . SimpleType());  break;
       default: DieNow("unknown element tag {$NodesA[$NodeX]['tag']}");
     }
   }
 
-  if ($nsId != TaxonomyElementNsId  # Don't store elements with other than this namespace
+  #f ($nsId != TaxonomyElementNsId) return;  # Don't store elements with other than this namespace
+  if (!$TesgN || $TesgN>=TESGN_LinkPart) return;  # Don't store elements no SG or other than Item to LinkPart
     # #onst TESGN_None        0; # NULL                  Num     Elements with no SG are not stored in the Elements table
     # const TESGN_Item      = 1; # xbrli:item           4717 /- only store items with these SGHs
     # const TESGN_Dimension = 2; # xbrldt:dimensionItem  131 |
@@ -588,8 +651,6 @@ function Element($nsId) {
     # const TESGN_Resource  = 9; # xl:resource
     # const TESGN_Simple    =10; # xl:simple
     # #onst TESGN_Tuple     =11; # xbrli:tuple
-    || !$TesgN || $TesgN>=TESGN_LinkPart)
-    return;
 
   ++$sElId;
   # $NamesMI [NsId.name => ElId]
@@ -605,7 +666,7 @@ function Element($nsId) {
 # Called from Schema()
 # <link:linkbaseRef xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase" xlink:href="full_ifrs/dimensions/dim_full_ifrs_2018-03-16_role-901000.xml" xlink:role="http://www.xbrl.org/2003/role/definitionLinkbaseRef" xlink:type="simple"/>
 function LinkbaseRef($node) {
-  global $LinkbasesA;
+  global $LinkbasesMA;
   if (@$node['attributes']['xlink:type'] != 'simple')    DieNow('LinkbaseRef type not simple');
   if (@$node['attributes']['xlink:arcrole'] != 'http://www.w3.org/1999/xlink/properties/linkbase') DieNow('LinkbaseRef arcrole not http://www.w3.org/1999/xlink/properties/linkbase');
   #$set = '';
@@ -625,7 +686,11 @@ function LinkbaseRef($node) {
   # Only interested in href for location
   foreach ($node['attributes'] as $a => $v)
     if (StripPrefix($a) == 'href') {
-      $LinkbasesA[] = FileAdjustRelative($v);
+      $loc = FileAdjustRelative($v);
+      if (isset($LinkbasesMA[$loc]))
+        echo "Linkbase $loc repeated - not processed<br>";
+      else
+         $LinkbasesMA[$loc] = 1;
       return;
     }
   DieNow('No href in linbaseRef');
@@ -898,14 +963,18 @@ function Arc($tltN, $pRoleId) {
         if (!isset($LocLabelToIdA[$v])) DieNow("Arc From=$v not set in \$LocLabelToIdA['$v'])");
         $fromIdsA = $LocLabelToIdA[$v];
         if (count($fromIdsA) > 1)
-          DumpExport('LocLabelToIdA in Arc() - Multiple Arc Froms <==========', $LocLabelToIdA);
+          #DumpExport('LocLabelToIdA in Arc() - Multiple Arc Froms <==========', $LocLabelToIdA);
+          #DumpNode(sprintf('Multiple (%d) Arc Froms <==========', count($fromIdsA)));
+          echo sprintf('%d multiple From %s Arcs in node %d <==========<br>', count($fromIdsA), $v, $NodeX);
         continue 2;
       case 'to':
         if (!isset($LocLabelToIdA[$v])) DieNow("Arc To=$v not set in \$LocLabelToIdA['$v'])");
         $toIdsA = $LocLabelToIdA[$v];
         # To types can be deduced from Arcs.TltN and ArcroleId but might not have the arcroleId yet so do this check later
         if (count($toIdsA) > 1)
-          DumpExport('LocLabelToIdA in Arc() - Multiple Arc Tos <==========', $LocLabelToIdA);
+          #DumpExport('LocLabelToIdA in Arc() - Multiple Arc Tos <==========', $LocLabelToIdA);
+          #DumpNode(sprintf('Multiple (%d) Arc Tos <==========', count($toIdsA)));
+          echo sprintf('%d multiple To %s Arcs in node %d <==========<br>', count($toIdsA), $v, $NodeX);
         continue 2;
       case 'arcrole':           $a = 'ArcroleId';       $v = $arcroleId = UpdateArcrole($v, $tltN); break;
       case 'preferredLabel':    $a = 'PrefLabelRoleId'; $v = UpdateRole($v);    break; #, $node['tag']);
@@ -1145,8 +1214,8 @@ function AddNamespace($prefix, $ns) {
   }
   $prefix = ($prefix > 'xmlns' && ($colon = strpos($prefix, ':')) > 0) ? substr($prefix, $colon+1) : '';
   if (!strlen($prefix))
-    # if no "prefix" or short form of the NS use the last url segment
-    $prefix = substr($ns, strrpos($ns, '/')+1);
+    # if no "prefix" or short form of the NS use the last url segment that isn't a date
+    $prefix = LastNonDateSegment($ns);
   $NsMA[$ns] = ['NsId' => ++$sNsId, 'Prefix'=>$prefix, 'FileIds'=>$FileId, 'Num'=>1];
   return $sNsId;
 }
@@ -1260,7 +1329,7 @@ function SetRole($roleURI, &$callingSet, $usedOn) {
 #         <definitionArc xlink:type="arc" xlink:arcrole="http://xbrl.org/int/dim/arcrole/hypercube-dimension" xlink:from="uk-gaap_BasicHypercube" xlink:to="uk-gaap_RestatementsDimension" order="1" use="optional" xbrldt:targetRole="http://www.xbrl.org/uk/role/Dimension-Restatements" />
 # Expect all arcroles to have been predefined
 function UpdateArcrole($arcroleURI, $usedOnN, $definition=NULL, $cyclesAllowed=NULL) {
-  global $FileId, $ArcRolesMA; # [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
+  global $FileId, $ArcRolesMA, $ArcroleId; # [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
   # http://www.xbrl.org/2003/arcrole/parent-child       => parent-child
   # http://xbrl.org/int/dim/arcrole/hypercube-dimension => hypercube-dimension
   # http://xbrl.org/arcrole/2008/element-label"         => element-label
@@ -1268,12 +1337,12 @@ function UpdateArcrole($arcroleURI, $usedOnN, $definition=NULL, $cyclesAllowed=N
   #$arcrole = str_replace(['http://', 'www.', 'xbrl.org/', '2003/', '2008/', 'arcrole/', 'int/'], '', $arcroleURI); # strip http:// etc
   # use the final uri segment i.e. after the final /
   $arcrole = substr($arcroleURI, strrpos($arcroleURI, '/')+1);
-  if (!isset($ArcRolesMA[$arcrole]))
-    DieNow("Arcrole $arcrole not predefined");
+  if (!isset($ArcRolesMA[$arcrole])) {
+    $ArcRolesMA[$arcrole] = ['Id' => ++$ArcroleId, 'usedOnN' => $usedOnN, 'definition' => $definition, 'PacioDef' => NULL, 'cyclesAllowed' => $cyclesAllowed, 'FileIds' => "$FileId", 'Uses' => 1];
+    return $ArcroleId;
+  }
   $arcroleA = $ArcRolesMA[$arcrole];
-  if (is_null($arcroleA['usedOnN']))
-    $arcroleA['usedOnN'] = $usedOnN;
-  else if ($usedOnN != $arcroleA['usedOnN'])
+  if ($usedOnN != $arcroleA['usedOnN'])
     DieNow("arcroleA['usedOnN'] {$arcroleA['usedOnN']} != $usedOnN");
   if (is_null($arcroleA['FileIds']))
     $arcroleA['FileIds'] = "$FileId";
@@ -1312,39 +1381,6 @@ function FixNameCase($name) { Not needed after removal of LinkPart elements from
   if (isset($NameFixesSA[$name])) return $NameFixesSA[$name];
   return $name;
 } */
-
-/*
-In http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
-have
-<import namespace="http://www.xbrl.org/2003/linkbase" schemaLocation="xbrl-linkbase-2003-12-31.xsd"/>
-want
-schemaLocation="xbrl-linkbase-2003-12-31.xsd
-to become
-http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
-*/
-function FileAdjustRelative($loc) {
-  global $File; # current Schema or Linkbase url
-  # File: http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
-  # loc:  xbrl-linkbase-2003-12-31.xsd
-  # -->   http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
-  # echo "FileAdjustRelative()<br>File: $File<br>loc:  $loc<br>";
-  if (strncmp($loc, 'http:', 5) == 0) {
-    # if $loc starts with http: accept it as it is
-    # echo 'loc unchanged<br>';
-    return $loc;
-  }
-  #$p = strrpos($File, '/'); // last '/' in $File
-  #echo 'loc -> ' . substr($File, 0, $p+1).$loc . '<br>';
-  #return substr($File, 0, $p+1).$loc;
-  return substr($File, 0, strrpos($File, '/')+1).$loc;
-}
-
-# Return tag stripped of prefix if any
-function StripPrefix($tag) {
-  if (($p = strpos($tag, ':')) > 0) # strip any prefix
-    return substr($tag, $p+1);
-  return $tag;
-}
 
 ///// Functions which are candidates for removal
 # Process re stepping over nodes but don't store
@@ -1429,8 +1465,23 @@ function AttributeGroup() {
   </simpleContent>
 </complexType>
 
-*/
+<xs:complexType name="invCompanyType">
+  <xs:simpleContent>
+    <xs:restriction base="xbrli:tokenItemType">
+      <xs:enumeration value="N-1A"/>
+      <xs:enumeration value="N-1"/>
+      <xs:enumeration value="N-2"/>
+      <xs:enumeration value="N-3"/>
+      <xs:enumeration value="N-4"/>
+      <xs:enumeration value="N-5"/>
+      <xs:enumeration value="N-6"/>
+      <xs:enumeration value="S-1 or S-3"/>
+      <xs:enumeration value="S-6"/>
+    </xs:restriction>
+  </xs:simpleContent>
+</xs:complexType>
 
+*/
 # Process re stepping over nodes but don't store
 function ComplexType($tuple=0) {
   global $DB, $NodesA, $NumNodes, $NodeX, $SchemaId, $TuplesA;
@@ -1459,7 +1510,7 @@ function ComplexType($tuple=0) {
   while (($NodeX+1) < $NumNodes && $NodesA[$NodeX+1]['depth'] > $depth) {
     $node = $NodesA[++$NodeX];
     #DumpExport("Node $NodeX in ComplexType() ", $node);
-    switch ($node['tag']) {
+    switch ( StripPrefix($node['tag'])) {
       case 'annotation':
       case 'documentation': break;
       case 'anyAttribute':  $set .= ",anyAttributeJson='" . json_encode($NodesA[$NodeX]['attributes']) . SQ;
@@ -1483,8 +1534,8 @@ function ComplexType($tuple=0) {
       case 'complexContent':
         while (($NodeX+1) < $NumNodes && $NodesA[$NodeX+1]['depth'] > $depth+1)
           $complexA[] = $NodesA[++$NodeX];
-        if ($tuple) DumpExport("Tuple complex content complexA for $tuple", $complexA);
-        if ($tuple) $TuplesA[$tuple] = $complexA;
+        # if ($tuple) DumpExport("Tuple complex content complexA for $tuple", $complexA);
+        # if ($tuple) $TuplesA[$tuple] = $complexA;
         break;
       case 'simpleContent':
         while (($NodeX+1) < $NumNodes && $NodesA[$NodeX+1]['depth'] > $depth+1)
@@ -1757,6 +1808,70 @@ function ReadNodes($loc) {
   }
   $XR->close();
   return $nodes;
+}
+
+/*
+In $File: http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
+have
+<import namespace="http://www.xbrl.org/2003/linkbase" schemaLocation="xbrl-linkbase-2003-12-31.xsd"/>
+want schemaLocation="xbrl-linkbase-2003-12-31.xsd
+to become
+http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
+
+In File  http://xbrl.fasb.org/us-gaap/2018/entire/us-gaap-entryPoint-std-2018-01-31.xsd
+have
+<xs:import namespace="http://fasb.org/stm/com/2018-01-31" schemaLocation="../stm/us-gaap-stm-com-2018-01-31.xsd"/>
+want schemaLocation="../stm/us-gaap-stm-com-2018-01-31.xsd
+to become
+http://xbrl.fasb.org/us-gaap/2018/stm/us-gaap-stm-com-2018-01-31.xsd
+
+*/
+function FileAdjustRelative($loc) {
+  global $File; # current Schema or Linkbase url
+  # File: http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd
+  # loc:  xbrl-linkbase-2003-12-31.xsd
+  # -->   http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd
+  # echo "FileAdjustRelative()<br>File: $File<br>loc:  $loc<br>";
+  if (strncmp($loc, 'http:', 5) === 0) {
+    # if $loc starts with http: accept it as it is
+    # echo 'loc unchanged<br>';
+    return $loc;
+  }
+  if (strncmp($loc, '../', 3) === 0) {
+    $fileBase = substr($File, 0, strrpos($File, '/')); # File stipped of last segment and
+    # http://xbrl.fasb.org/us-gaap/2018/entire/us-gaap-entryPoint-std-2018-01-31.xsd => http://xbrl.fasb.org/us-gaap/2018/entire
+    while (strncmp($loc, '../', 3) === 0) {
+      $fileBase = substr($fileBase, 0, strrpos($fileBase, '/')); # File stipped of last segment and
+      # http://xbrl.fasb.org/us-gaap/2018/entire => http://xbrl.fasb.org/us-gaap/2018
+      $loc = substr($loc, 3);
+    }
+    return $fileBase . '/' . $loc;
+  }
+  # else replace last segment in $File
+  return substr($File, 0, strrpos($File, '/')+1).$loc;
+}
+
+# Return tag stripped of prefix if any
+function StripPrefix($tag) {
+  if (($p = strpos($tag, ':')) > 0) # strip any prefix
+    return substr($tag, $p+1);
+  return $tag;
+}
+
+# Return last url segment of a uri which isn't a YYY-MM-DD date as used in uris
+# e.g. for http://fasb.org/us-gaap-std/2018-01-31
+#      return us-gaap-std
+function LastNonDateSegment($uri) {
+  $segsA = explode('/', $uri);
+  $j= count($segsA) - 1;
+  while ($j >= 0) {
+    $ret = $segsA[$j];
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $ret))
+      $j--;
+    else
+      return $ret;
+  }
+  return '';
 }
 
 # DieNow()

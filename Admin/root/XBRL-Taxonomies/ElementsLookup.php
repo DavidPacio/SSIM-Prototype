@@ -19,6 +19,7 @@ History:
 */
 require '../../inc/BaseTx.inc';
 require '../../inc/tx/ConstantsTx.inc';
+require "../../inc/tx/$TxName/ConstantsTx.inc"; # taxonomy specific stuff
 
 # # List of Tx Elements which have StartEnd values. See Doc/Tx/UK-IFRS-DPL/StartEndPeriodNotes.txt for its derivation.
 # $StartEndTxIdsGA=[788, 1070, 1697, 2235, 2247, 4626, 4633, 4742, 4746, 5783, 6036, 7915, 8524];
@@ -244,21 +245,28 @@ function ToTrees($toId) {
   global $DB, $TargetId, $TreeChoice, $StartEndTxIdsGA, $ExpandOnlyOwnToTreeB; # Target = $toId
   # Fetch arcs to $fromId for all arcroles.
   # 07.11.11 Added Distinct re duplicates e.g. for 4062. But note comments below vs Distinct and Group by.
-  # Taxonomy Arcrole Id (Arcroles.Id) constants which are in TLTN_ sequence
-  # -------------------                                 /- TLTN_* arc (link) type
-  #onst TARId_HypercubeDim  =  1; # hypercube-dimension 1  From hypercube To dimension in the hypercube               Source (a hypercube) contains the target (a dimension) among others.
-  #onst TARId_DimDomain     =  2; # dimension-domain    1  From dimension To first dimension member of the dimension  Source (a dimension) has only the target (a domain) as its domain.
-  #onst TARId_DomainMember  =  3; # domain-member       1  From domain contains To member                             Source (a domain) contains the target (a member).
-  #onst TARId_DimAll        =  4; # all                 1  From source requires dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) to appear in the context of the primary item.
-  #onst TARId_DimNotAll     =  5; # notAll              1  From source excludes dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) not to appear in the context of the primary item.
-  #onst TARId_DimDefault    =  6; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
-  #onst TARId_ParentChild   =  7; # parent-child        2  From parent To child
-  #onst TARId_SummationItem =  8; # summation-item      3  From element sums To element
+  ## Taxonomy Arcrole Id (Arcroles.Id) constants which are in descending TLTN_ order because of US GAAP adding lots more declaration ones
+  ## -------------------                                 /- TLTN_* arc (link) type
+  #const TARId_ElementRef    =  1; # element-reference   6  From element has To reference
+  #const TARId_ElementLabel  =  2; # element-label       6  From element has To label
+  #const TARId_ConceptRef    =  3; # concept-reference   5  From element has To reference
+  #const TARId_ConceptLabel  =  4; # concept-label       4  From element has To label
+  #const TARId_SummationItem =  5; # summation-item      3  From element sums To element
+  #const TARId_ParentChild   =  6; # parent-child        2  From parent To child
+  #const TARId_FirstDeclarationArcole = 7; #             1
+  #const TARId_HypercubeDim  =  7; # hypercube-dimension 1  From hypercube To dimension in the hypercube               Source (a hypercube) contains the target (a dimension) among others.
+  #const TARId_DimDomain     =  8; # dimension-domain    1  From dimension To first dimension member of the dimension  Source (a dimension) has only the target (a domain) as its domain.
+  #const TARId_DomainMember  =  9; # domain-member       1  From domain contains To member                             Source (a domain) contains the target (a member).
+  #const TARId_DimAll        = 10; # all                 1  From source requires dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) to appear in the context of the primary item.
+  #const TARId_DimNotAll     = 11; # notAll              1  From source excludes dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) not to appear in the context of the primary item.
+  #const TARId_DimDefault    = 12; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
+  #const TARId_EssenceAlias  = 13; # essence-alias       1  To is Alias of From used by US GAAP for one of their deprecated series of arcroles
+  #const TARId_DepConcepts   = 14; # dep-aggregateConcept-deprecatedPartConcept 1 From aggregate concept To deprecated part concept'], etc added by build for US GAAP
   switch ($TreeChoice) { # All, Definition, Presentation, Calculation
-    case 0: $qry = "Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId<9 and ToId=$toId Order by ArcroleId,PRoleId,TargetRoleId,ArcOrder"; break; # all trees
-    case 1: $qry = "Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId<7 and ToId=$toId Order by ArcroleId,PRoleId,TargetRoleId,ArcOrder"; break; # Definition only
-    case 2: $qry = "Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId=7 and ToId=$toId Order by PRoleId,TargetRoleId,ArcOrder"; break;           # Presentation only
-    case 3: $qry = "Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId=8 and ToId=$toId Order by PRoleId,TargetRoleId,ArcOrder"; break;           # Calculation only
+    case 0: $qry = sprintf('Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId>=%d and ToId=%d Order by ArcroleId,PRoleId,TargetRoleId,ArcOrder', TARId_SummationItem, $toId);          break; # all trees
+    case 1: $qry = sprintf('Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId>=%d and ToId=%d Order by ArcroleId,PRoleId,TargetRoleId,ArcOrder', TARId_FirstDeclarationArcole, $toId); break; # Definition only
+    case 2: $qry = sprintf('Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId=%d  and ToId=%d Order by PRoleId,TargetRoleId,ArcOrder', TARId_ParentChild, $toId);   break; # Presentation only
+    case 3: $qry = sprintf('Select ArcroleId,FromId,PRoleId,TargetRoleId from Arcs Where ArcroleId=%d  and ToId=%d Order by PRoleId,TargetRoleId,ArcOrder', TARId_SummationItem, $toId); break; # Calculation only
   }
   $res = $DB->ResQuery($qry);
   if ($res->num_rows) {
@@ -366,21 +374,30 @@ function ToTrees($toId) {
 function FromTrees($fromId) {
   global $DB, $TreeChoice, $StartEndTxIdsGA;
   $arcrolesA = [];
-  # Taxonomy Arcrole Id (Arcroles.Id) constants which are in TLTN_ sequence
-  # -------------------                                 /- TLTN_* arc (link) type
-  #onst TARId_HypercubeDim  =  1; # hypercube-dimension 1  From hypercube To dimension in the hypercube               Source (a hypercube) contains the target (a dimension) among others.
-  #onst TARId_DimDomain     =  2; # dimension-domain    1  From dimension To first dimension member of the dimension  Source (a dimension) has only the target (a domain) as its domain.
-  #onst TARId_DomainMember  =  3; # domain-member       1  From domain contains To member                             Source (a domain) contains the target (a member).
-  #onst TARId_DimAll        =  4; # all                 1  From source requires dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) to appear in the context of the primary item.
-  #onst TARId_DimNotAll     =  5; # notAll              1  From source excludes dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) not to appear in the context of the primary item.
-  #onst TARId_DimDefault    =  6; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
-  #onst TARId_ParentChild   =  7; # parent-child        2  From parent To child
-  #onst TARId_SummationItem =  8; # summation-item      3  From element sums To element
+  # # Taxonomy Arcrole Id (Arcroles.Id) constants which are in descending TLTN_ order because of US GAAP adding lots more declaration ones
+  # # -------------------                                 /- TLTN_* arc (link) type
+  # const TARId_ElementRef    =  1; # element-reference   6  From element has To reference
+  # const TARId_ElementLabel  =  2; # element-label       6  From element has To label
+  # const TARId_ConceptRef    =  3; # concept-reference   5  From element has To reference
+  # const TARId_ConceptLabel  =  4; # concept-label       4  From element has To label
+  # const TARId_SummationItem =  5; # summation-item      3  From element sums To element
+  # const TARId_ParentChild   =  6; # parent-child        2  From parent To child
+  # const TARId_FirstDeclarationArcole = 7; #             1
+  # const TARId_HypercubeDim  =  7; # hypercube-dimension 1  From hypercube To dimension in the hypercube               Source (a hypercube) contains the target (a dimension) among others.
+  # const TARId_DimDomain     =  8; # dimension-domain    1  From dimension To first dimension member of the dimension  Source (a dimension) has only the target (a domain) as its domain.
+  # const TARId_DomainMember  =  9; # domain-member       1  From domain contains To member                             Source (a domain) contains the target (a member).
+  # const TARId_DimAll        = 10; # all                 1  From source requires dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) to appear in the context of the primary item.
+  # const TARId_DimNotAll     = 11; # notAll              1  From source excludes dimension members in the To hypercube Source (a primary item declaration) requires a combination of dimension members of the target (hypercube) not to appear in the context of the primary item.
+  # const TARId_DimDefault    = 12; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
+  # const TARId_EssenceAlias  = 13; # essence-alias       1  To is Alias of From used by US GAAP for one of their deprecated series of arcroles
+  # #onst TARId_DepConcepts   = 14; # dep-aggregateConcept-deprecatedPartConcept 1 From aggregate concept To deprecated part concept'], etc added by build for US GAAP
+  # #onst TARId_LastDeclarationArcole = xx; #             1  Defined in /inc/tx/TxName/ConstantsTx.inc; # taxonomy specific stuff
+
   switch ($TreeChoice) {
-    case 0: $i=TARId_HypercubeDim; $end = TARId_SummationItem; break; # All
-    case 1: $i=TARId_HypercubeDim; $end = TARId_DimDefault;    break; # Definition
-    case 2: $i=TARId_ParentChild;  $end = TARId_ParentChild;   break; # Presentation
-    case 3: $i=TARId_SummationItem;$end = TARId_SummationItem; break; # Calculation
+    case 0: $i=TARId_SummationItem;          $end = TARId_LastDeclarationArcole; break; # All
+    case 1: $i=TARId_FirstDeclarationArcole; $end = TARId_LastDeclarationArcole; break; # Definition
+    case 2: $i=TARId_ParentChild;            $end = TARId_ParentChild;   break; # Presentation
+    case 3: $i=TARId_SummationItem;          $end = TARId_SummationItem; break; # Calculation
   }
   for ( ; $i <= $end; $i++)
     $arcrolesA[] = $i;

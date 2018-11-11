@@ -4,6 +4,8 @@ XBRL IFRS SME 2018 taxonomy specific stuff
 
 History:
 2018.11.08 Started empty
+2018.11.11 TARId_LastDeclarationArcole added
+
 */
 
-
+const TARId_LastDeclarationArcole = TARId_EssenceAlias;

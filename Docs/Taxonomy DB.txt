@@ -119,7 +119,7 @@ Sample Instance
 ########## http://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html#_3.5.3.9
 # http://www.datypic.com/sc/xbrl21/e-link_calculationArc.html
 CREATE TABLE Arcs (
-  Id           smallint unsigned not null auto_increment,
+  Id          mediumint unsigned not null auto_increment,
   TltN         tinyint  unsigned not null, # Taxonomy Link Type Enum: TLTN_Definition 1 | TLTN_Presentation 2 | TLTN_Calculation 3 | TLTN_Label 4 | TLTN_Reference 5 | TLTN_GenLink 6 | TLTN_Footnote
   FromId       smallint unsigned not null, # Elements.Id | Resources.Id | Roles.Id   [1..1] xsd:NCName
   ToId         smallint unsigned not null, # Elements.Id | Resources.Id | Roles.Id   [1..1] xsd:NCName
@@ -352,7 +352,7 @@ Ref:   RoleId in range TRId_Reference to TRId_CommonPracticeRef
 ## Elements ## http://www.schemacentral.com/sc/xsd/e-xsd_element-1.html
 ##############
 CREATE TABLE Elements (
-  Id            smallint unsigned not null auto_increment,
+  Id           mediumint unsigned not null auto_increment,
   NsId          tinyint  unsigned not null, # Namespaces.Id of the target namespace of the schema
   TetN          tinyint  unsigned     null, # TETN_* enum for element type e.g. TETN_Money, TETN_String ....
   TesgN         tinyint  unsigned     null, # TESGN_* enum for substitutionGroup e.g. TESGN_Item ....
@@ -366,9 +366,8 @@ CREATE TABLE Elements (
   abstract      tinyint  unsigned     null, # abstract                      Default "false". True stored as 1
   nillable      tinyint  unsigned     null, # nillable  [0..1] xsd:boolean  Default "false". True stored as 1
 # DocId         smallint unsigned     null, # Text.Id for element documentation though spec says not required to show doc other than via labels - not stored
-  Hypercubes    tinytext              null, # List of hypercubes for this element as Hypercubes.Id in csv form. Max # for IFRS is 8
-# ComplexTypeId tinyint  unsigned     null, # Never used
-# SimpleTypeId  tinyint  unsigned     null, # Never used
+  Hypercubes     tinytext             null, # List of hypercubes for this element as Hypercubes.Id in csv form. Max # for IFRS is 8
+  typedDomainRef tinytext             null, # xbrldt:typedDomainRef re a typed dimension
   FileId        tinyint  unsigned not null, # Imports.Id of the schema file where defined - info purposes only. Is the same as Schema.Id
   Primary Key (Id),
           Key (name)                     # Can have duplicate names, one concrete, one abstract e.g. documentation. Found can have other
@@ -383,96 +382,8 @@ CREATE TABLE Elements (
 # Query re unique names
 # SELECT N.name, E.Id,E.abstract,E.NsId,E2.Id,E2.abstract,E2.NsId FROM elements E join Elements E2 on E.NameId=E2.NameId join Names N on E.NameId=N.Id where E.Id < E2.Id order by N.Id
 
-<element id="uk-bus_OrdinaryShareClass1"   name="OrdinaryShareClass1" type="uk-types:domainItemType" substitutionGroup="xbrli:item" xbrli:periodType="duration" abstract="true" nillable="true" />
-<element id="uk-direp_OrdinaryShareClass1" name="OrdinaryShareClass1" type="uk-types:domainItemType" substitutionGroup="xbrli:item" xbrli:periodType="duration" abstract="true" nillable="true" />
-
 Notes:
 - concept elements must have an id
-
-Retired 29.03.11 in favour of enums and DocId as above
-# type              varchar(40)           null, # type      [0..1] xsd:QName    max length =  35 from uk-types:entityAccountsTypeItemType
-# substitutionGroup varchar(20)           null, # null (23) | link:part (56) | xbrldt:dimensionItem (42)  | xbrldt:hypercubeItem (46) |
-#                                               # xbrli:item (6076) | xbrli:tuple (158) | xl:arc (6)      | xl:documentation (1) |
-#                                               # xl:extended (6)   | xl:locator  (1)   | xl:resource (3) |  xl:simple (4)
-# periodType        varchar(8)            null, # xbrli:periodType  null (258)  | duration (5098) | instant (1066)
-# balance           varchar(6)            null, # xbrli:balance     null (3711) | credit (876)    | debit (1835) T = 6422
-# Doc               varchar(180)          null, # max length = 178
-
-xsd:element
-Element Information
-Namespace: http://www.w3.org/2001/XMLSchema
-Schema Document: xmlschema.xsd
-Properties: Local, Qualified
-Type: xsd:localElement
-Other elements with the same name: xsd:element, xsd:element
-
-Content
-  Sequence [1..1]
-    xsd:annotation [0..1]
-    Choice [0..1]
-      xsd:simpleType
-      xsd:complexType
-    Choice [0..*]   from group xsd:identityConstraint
-      xsd:unique
-      xsd:key
-      xsd:keyref
-
-Attributes
-Name       Occ   Type         Description  Notes
-id        [0..1] xsd:ID       inherited from xsd:annotated
-name      [0..1] xsd:NCName   from group xsd:defRef
-type      [0..1] xsd:QName    inherited from xsd:element
-nillable  [0..1] xsd:boolean   Default value is "false". inherited from xsd:element
-ref       [0..1] xsd:QName    from group xsd:defRef                                   /- Not used in UK GAAP
-minOccurs [0..1] xsd:nonNegativeInteger  Default value is "1". from group xsd:occurs  |
-maxOccurs [0..1] xsd:allNNI    Default value is "1". from group xsd:occurs            |
-default   [0..1] xsd:string    inherited from xsd:element                             |
-fixed     [0..1] xsd:string    inherited from xsd:element                             |
-block     [0..1] xsd:blockSet    inherited from xsd:element                           |
-form      [0..1] xsd:formChoice  inherited from xsd:element                           |
-Any attribute  [0..*]    Namespace: ##other, Process Contents: lax
-Used In
-    Group xsd:nestedParticle
-    Group xsd:particle
-    Type xsd:explicitGroup
-    Type xsd:group
-    Type xsd:simpleExplicitGroup
-
-Sample Instance
-
-<xsd:element>
-   <xsd:simpleType>
-      <xsd:restriction>
-         <xsd:simpleType>...
-         </xsd:simpleType>
-         <xsd:minExclusive value="any value">...
-         </xsd:minExclusive>
-      </xsd:restriction>
-   </xsd:simpleType>
-   <xsd:unique name="NCName">
-      <xsd:selector xpath="token">
-      </xsd:selector>
-      <xsd:field xpath="token">
-      </xsd:field>
-   </xsd:unique>
-</xsd:element>
-
-  <element name="documentation"  type="xl:documentationType"
-    substitutionGroup="xl:documentation">
-    <annotation>
-      <documentation>
-      Concrete element to use for documentation of extended links and linkbases.
-      </documentation>
-    </annotation>
-  </element>
-
-  <element name="documentation" type="xl:documentationType" abstract="true">
-    <annotation>
-      <documentation>
-      Abstract element to use for documentation of extended links and linkbases.
-      </documentation>
-    </annotation>
-  </element>
 
 End Element
 

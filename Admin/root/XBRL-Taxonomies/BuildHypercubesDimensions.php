@@ -54,8 +54,8 @@ echo "<br><b>Building Dimension Tables</b><br>\n";
 $currentDimElId = $currentPRoleId = $n = $dimId = 0;
 # B code did both TARId_DimDefault and TARId_DimDomain in this loop but in IFRS TARId_DimDefault had a different role - role 17
 # Here use just TARId_DimDomain (From dimension To first dimension member of the dimension) and then to come back later to do the defaults with role ignored
-#                             Select A.* From Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=2 and A.ArcroleId=2 Order by A.FromId,A.PRoleId /- same ie the TesgN=2 is redundant as all TARId_DimDomain ArcroleId
-#                             Select A.* From Arcs A Join Elements E on E.Id=A.FromId Where A.ArcroleId=2 Order by A.FromId,A.PRoleId               |  arcs are TesgN TESGN_Dimension 2 ones
+#                             Select A.* From Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=2 and A.ArcroleId=8 Order by A.FromId,A.PRoleId /- same ie the TesgN=2 is redundant as all TARId_DimDomain ArcroleId
+#                             Select A.* From Arcs A Join Elements E on E.Id=A.FromId Where A.ArcroleId=8 Order by A.FromId,A.PRoleId               |  arcs are TesgN TESGN_Dimension 2 ones
 $res = $DB->ResQuery(sprintf('Select A.* From Arcs A Join Elements E on E.Id=A.FromId Where A.ArcroleId=%d Order by A.FromId,A.PRoleId', TARId_DimDomain));
 # Gives 291 for IFRS rather than 131, the number of TESGN_Dimension elements and also the number of TARId_DimDefault arcs, because of multiple roles per dimension
 while ($o = $res->fetch_object()) {

@@ -38,7 +38,7 @@ while ($o = $res->fetch_object()) {
   echo "<tr><td class='r top'>$roleId</td><td class=top>$o->Role</td><td class=top>$usedOn</td><td class=top>$definition</td>";
   # Associated Dimensions
   $tdS = '';                   # Select E.Id, E.name from Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=2 and A.ArcroleId<=6 and A.PRoleId=38 Group by A.FromId                    # last definition arcrole Id
-  $res2 = $DB->ResQuery(sprintf('Select E.Id, E.name from Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=%d And A.ArcroleId<=%d and A.PRoleId=%d Order by A.FromId', TESGN_Dimension, TARId_DimDefault, $roleId));
+  $res2 = $DB->ResQuery(sprintf('Select E.Id, E.name from Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=%d And A.ArcroleId<=%d and A.PRoleId=%d Order by A.FromId', TESGN_Dimension, TARId_EssenceAlias, $roleId));
   if ($res2->num_rows)
     while ($o2 = $res2->fetch_object())
       $tdS .= "<br>Dim El:$o2->Id ".Fold($o2->name, 100);
