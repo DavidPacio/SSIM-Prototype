@@ -44,7 +44,6 @@ const TARId_DimNotAll     = 11; # notAll              1  From source excludes di
 const TARId_DimDefault    = 12; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
 const TARId_EssenceAlias  = 13; # essence-alias       1  To is Alias of From used by US GAAP for one of their deprecated series of arcroles
 #onst TARId_DepConcepts   = 14; # dep-aggregateConcept-deprecatedPartConcept 1 From aggregate concept To deprecated part concept'], etc added by build for US GAAP
-#onst TARId_LastDeclarationArcole = xx; #             1  Defined in /inc/tx/TxName/ConstantsTx.inc; # taxonomy specific stuff
 
 # Taxonomy Link Type enums  Arcs.TltN LinkTypeToStr() gives string form
 # ------------------------
@@ -98,35 +97,38 @@ const TETN_IndexKey              = 35; # dei:centralIndexKeyItemType       Restr
 const TETN_CountryCode           = 36; # dei:countryItemType      ISO code Restriction: 2 characters, 1st is an uppercase letter, 2nd is an upper case letter or digit
 const TETN_CurrencyCode          = 37; # dei:currencyItemType     ISO code Restriction: 3 letter code, all uppercase
 const TETN_FileNumber            = 38; # dei:fileNumberItemType            Pattern [0-9]{1,3}-[0-9]{1,8}(-.{1,4})?
-const TETN_FilerCategory         = 39; # dei:filerCategoryItemType         Enumeration: "Large Accelerated Filer", "Accelerated Filer", "Non-accelerated Filer, Smaller Reporting Company"
-const TETN_FiscalPeriod          = 40; # dei:fiscalPeriodItemType          Enumeration: "FY", "Q1", "Q2", "Q3", "Q4", "H1", "H2", "M9", "T1", "T2"," T3", "M8", "CY"
-const TETN_InvCompanyCode        = 41; # dei:invCompanyType                Enumeration: "N-1A", "N-1", "N-2", "N-3", "N-4", "N-5", "N-6", "S-1 or S-3", "S-6"
+const TETN_FilerCategory         = 39; # dei:filerCategoryItemType         Enum "Large Accelerated Filer", "Accelerated Filer", "Non-accelerated Filer, Smaller Reporting Company"
+const TETN_FiscalPeriod          = 40; # dei:fiscalPeriodItemType          Enum "FY", "Q1", "Q2", "Q3", "Q4", "H1", "H2", "M9", "T1", "T2"," T3", "M8", "CY"
+const TETN_InvCompanyCode        = 41; # dei:invCompanyType                Enum "N-1A", "N-1", "N-2", "N-3", "N-4", "N-5", "N-6", "S-1 or S-3", "S-6"
 const TETN_LegalEntityIdentifier = 42; # dei:legalEntityIdentifierItemType Pattern: "[A-Z0-9]{20}"
 const TETN_NineDigitCode         = 43; # dei:nineDigitItemType             Restriction: 9 digits
-const TETN_SubmissionType        = 44; # dei:submissionTypeItemType        Enumeration: "10-K", "10-KT", "10-Q"," 10-QT"," 20-F", "20-FT", "40-F", "485BPOS", "497"", 6-K"," 8-K"," F-1"," F-3", "F-4," "F-9", "F-10," "N-CSR", "N-CSR", "N-Q, ", "POS AM", "S-1", "S-3," "S-4", "S-11"," Other"," N-1A", "NCSR,"" 10"
-const TETN_YesNo                 = 45; # dei:yesNoItemType                 Enumeration: "Yes" or "No"
+const TETN_SubmissionType        = 44; # dei:submissionTypeItemType        Enum "10-K", "10-KT", "10-Q"," 10-QT"," 20-F", "20-FT", "40-F", "485BPOS", "497"", 6-K"," 8-K"," F-1"," F-3", "F-4," "F-9", "F-10," "N-CSR", "N-CSR", "N-Q, ", "POS AM", "S-1", "S-3," "S-4", "S-11"," Other"," N-1A", "NCSR,"" 10"
+const TETN_YesNo                 = 45; # dei:yesNoItemType                 Enum "Yes" or "No"
 # US GAAP one from http://xbrl.sec.gov/invest/2013/invest-2013-01-31.xsd
-const TETN_BuySell               = 46; # invest:foreignCurrencyContractTransactionItemType  Enumeration: "Buy" or "Sell"
+const TETN_BuySell               = 46; # invest:foreignCurrencyContractTransactionItemType  Enum "Buy" or "Sell"
 # US GAAP one from http://xbrl.fasb.org/srt/2018/elts/srt-2018-01-31.xsd
 const TETN_ExtensibleList        = 47; # srt-types:extensibleListItemType  Std label suffix [Extensible List]
 # US GAAP us-types
-const TETN_YearList              = 48; # us-types:gYearListItemType        Allows a list of years e.g. "2015 2016 2017" rather than one as for TETN_Year xbrli:gYearItemType
-const TETN_PerUnit               = 49; # us-types:perUnitItemType
-const TETN_ThreeDigits           = 50; # us-types:threeDigitItemType
-const TETN_NineDigits            = 51; # us-types:nineDigitItemType
-const TETN_AuthorizedUnlimited   = 52; # us-types:authorizedUnlimitedItemType Enumeration: Unlimited
-const TETN_FlowRate              = 53; # us-types:flowItemType
-const TETN_DistributionsReceivedApproach = 54; # us-types:distributionsReceivedApproach  Enumeration "Cumulative earnings", "Nature of distribution"
-const TETN_InterestRateType              = 55; # us-types:interestRateItemType         Enumeration "Floating", "Fixed"
-const TETN_RestrictedInvestmentType      = 56; # us-types:restrictedInvestmentItemType Enumeration "Restricted Investment", "Restricted Investment Exempt from Registration", "Restricted Investment Not Exempt from Registration"
-const TETN_InvestmentPledgedType         = 57; # us-types:investmentPledgedItemType    Enumeration "Investment Pledged", "Entire Investment Pledged", "Partial Investment Pledged"
-const TETN_InvestmentOnLoanForShortSalesType  = 58; # us-types:investmentOnLoanForShortSalesItemType  Enumeration "Investment on Loan", "Entire Investment on Loan", "Partial Investment on Loan"
-const TETN_MalpracticeInsuranceClaimsMadeType = 59; # us-types:MalpracticeInsurance-OccurrenceOrClaims-madeItemType  Enumeration for "Occurrence", "Claims-made"
-const TETN_FundedStatus                       = 60; # us-types:fundedStatusItemType   Enum for "Less than 65 percent", "Between 65 and less than 80 percent", "At least 80 percent", "NA"
-const TETN_FundingImprovementAndRehabilitationPlanType = 61; # us-types:fundingImprovementAndRehabilitationPlanItemType  Enum "No", "Pending", "Implemented", "Other", "NA"
-const TETN_ZoneStatus                                  = 62; # us-types:zoneStatusItemType  Enum "Green", "Yellow", "Orange", "Red", "Other", "NA"
-const TETN_SurchargeType                               = 63; # us-types:surchargeItemType   Enum "No", "Yes", "NA"
-const TETN_ForfeitureMethod                            = 64; # us-types:forfeitureMethod    Enum "Estimating expected forfeitures", "Recognizing forfeitures when they occur"
+const TETN_YearList                      = 48; # us-types:gYearListItemType        Allows a list of years e.g. "2015 2016 2017" rather than one as for TETN_Year xbrli:gYearItemType
+const TETN_PerUnit                       = 49; # us-types:perUnitItemType
+const TETN_ThreeDigits                   = 50; # us-types:threeDigitItemType
+const TETN_NineDigits                    = 51; # us-types:nineDigitItemType
+const TETN_AuthorizedUnlimited           = 52; # us-types:authorizedUnlimitedItemType    Enum Unlimited
+const TETN_FlowRate                      = 53; # us-types:flowItemType
+const TETN_DistributionsReceivedApproach = 54; # us-types:distributionsReceivedApproach  Enum "Cumulative earnings", "Nature of distribution"
+const TETN_InterestRateType              = 55; # us-types:interestRateItemType           Enum "Floating", "Fixed"
+const TETN_RestrictedInvestmentType      = 56; # us-types:restrictedInvestmentItemType   Enum "Restricted Investment", "Restricted Investment Exempt from Registration", "Restricted Investment Not Exempt from Registration"
+const TETN_InvestmentPledgedType         = 57; # us-types:investmentPledgedItemType      Enum "Investment Pledged", "Entire Investment Pledged", "Partial Investment Pledged"
+const TETN_InvestmentOnLoanForShortSales = 58; # us-types:investmentOnLoanForShortSalesItemType  Enum "Investment on Loan", "Entire Investment on Loan", "Partial Investment on Loan"
+const TETN_MalpracticeInsuranceClaims    = 59; # us-types:MalpracticeInsurance-OccurrenceOrClaims-madeItemType  Enum for "Occurrence", "Claims-made"
+const TETN_FundedStatus                  = 60; # us-types:fundedStatusItemType Enum "Less than 65 percent", "Between 65 and less than 80 percent", "At least 80 percent", "NA"
+const TETN_FundingImprovementAndRehabilitationPlan = 61; # us-types:fundingImprovementAndRehabilitationPlanItemType  Enum "No", "Pending", "Implemented", "Other", "NA"
+const TETN_ZoneStatus                    = 62; # us-types:zoneStatusItemType   Enum "Green", "Yellow", "Orange", "Red", "Other", "NA"
+const TETN_SurchargeType                 = 63; # us-types:surchargeItemType    Enum "No", "Yes", "NA"
+const TETN_ForfeitureMethod              = 64; # us-types:forfeitureMethod     Enum "Estimating expected forfeitures", "Recognizing forfeitures when they occur"
+const TETN_ElementListType               = 65; # tin-part:elementListItemType  Pattern \s*(([\i-[:]][\c-[:]]*:)?[\i-[:]][\c-[:]]*(\s+([\i-[:]][\c-[:]]*:)?[\i-[:]][\c-[:]]*)*)?\s*
+const TETN_TransitionOptionList          = 65; # tin-part:TransitionOptionList Enum "Retrospective", "Prospective", "Modified Retrospective", "Modified Prospective"
+const TETN_AsuNumber                     = 65; # tin-part:AsuNumber            Pattern [0-9]{4}-[0-9]{2}
 
 # Notes
 # -----
@@ -190,10 +192,8 @@ const DiMeB_Default =   1; # 0 D  Taxonomy default
 
 #############
 # Functions #
-#############
-
-function ElementTypeToStr($tetN) {
-                # 0       1          2                   3        4          5                   6         7          8       9                 10      11            12
+#############     0       1
+function ElementTypeToStr($tetN) { # 2                   3        4          5                   6         7          8       9                 10      11            12
   static $sAS = ['None', 'Integer', 'Positive integer', 'Money', 'Decimal', 'Non zero decimal', 'String', 'Boolean', 'Date', 'Month Day date', 'Year', 'Year Month', 'Duration',
    # 13       14      15        16      17         18          19        20            21           22          23     24     25       26     27     28
     'Share', 'Area', 'Energy', 'Mass', 'Percent', 'PerShare', 'Volume', 'DomainItem', 'TextBlock', 'PureItem', 'Uri', 'Any', 'QName', 'Arc', 'Doc', 'Extended',
@@ -205,8 +205,8 @@ function ElementTypeToStr($tetN) {
      'YesNo', 'BuySell', 'ExtensibleList', 'YearList', 'PerUnit', 'ThreeDigits', 'NineDigits', 'AuthorizedUnlimited', 'FlowRate',
    #  54                               55                  56                          57                       58                                   59
      'DistributionsReceivedApproach', 'InterestRateType', 'RestrictedInvestmentType', 'InvestmentPledgedType', 'InvestmentOnLoanForShortSalesType', 'MalpracticeInsuranceClaimsMadeType',
-   #  60              61                                             62            63               64
-     'FundedStatus', 'FundingImprovementAndRehabilitationPlanType', 'ZoneStatus', 'SurchargeType', 'ForfeitureMethod'];
+   #  60              61                                             62            63               64                  65                 66                      67
+     'FundedStatus', 'FundingImprovementAndRehabilitationPlanType', 'ZoneStatus', 'SurchargeType', 'ForfeitureMethod', 'ElementListType', 'TransitionOptionList', 'AsuNumber'];
   return $sAS[(int)$tetN];
 }
 

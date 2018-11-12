@@ -60,13 +60,13 @@ set_time_limit(120); # was taking 133 secs to run for IFRS 2018 anyway but this 
 # Second Last Letter or last if default type int with no "I"
 # A  int key array
 # M  alpha key array (map) - should always have a following letter
-$RolesMA    = # [RoleS       => [Id, usedOn, definition, FileIds, Uses]]
-$ArcRolesMA = # [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
-$NsMA       = # [namespace   => [NsId, Prefix, FileIds, Num]
-#NamesMI    = # [NsId.name   =>  ElId]
-$XidsMI     = # [xidS  => ElId]  Not written to a table
-#TextMA     = # [Text  => [TextId, Uses]]
-$LinkbasesMA = []; # [location => 1]
+$RolesMA      = # [RoleS       => [Id, usedOn, definition, FileIds, Uses]]
+$ArcRolesMA   = # [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
+$NamespacesMA = # [namespaceS => [NsId, Prefix, FileIds, Num]
+#NamesMI      = # [NsId.name   =>  ElId]
+$XidsMI       = # [xidS  => ElId]  Not written to a table
+#TextMA       = # [Text  => [TextId, Uses]]
+$LinkbasesMA  = []; # [location => 1]
 
 $tablesA = [
   'Arcroles',
@@ -100,7 +100,7 @@ $tablesA = [
 # const TRId_CommonPracticeRef = 15; # commonPracticeRef reference
 # const TRId_Link              = 16; # link              link,labelLink,referenceLink
 
-$rolesA = [ # role       usedOn       definition
+$rolesAA = [ # role       usedOn       definition
   ['label',             'label',     'Standard Label'],
   ['verboseLabel',      'label',     'Verbose Label'],
   ['terseLabel',        'label',     'Terse Label'],
@@ -119,13 +119,13 @@ $rolesA = [ # role       usedOn       definition
   ['link',              'link,labelLink,referenceLink', 'Link, Label Link, Reference Link'],
 ];
 $RoleId=0;
-foreach ($rolesA as $role) {
+foreach ($rolesAA as $role) {
   list($role, $usedOn, $definition) = $role;
   $RolesMA[$role] = ['Id' => ++$RoleId, 'usedOn' => $usedOn, 'definition' => $definition, 'FileIds' => NULL, 'Uses' => 0]; # [RoleS => [Id, usedOn, definition, FileIds, Uses]]
 }
-unset($rolesA);
+unset($rolesAA);
 
-# Add the XBRL Arcroles to get them in the desired Id order to match the TARId_ constants which are in TLTN_ sequence, with Pacio short definition added
+# Predfine the main XBRL Arcroles to get them in the desired Id order to match the TARId_ constants which are in TLTN_ sequence, with Pacio short definition added
 
 # # Taxonomy Arcrole Id (Arcroles.Id) constants which are in descending TLTN_ order because of US GAAP adding lots more declaration ones
 # # -------------------                                 /- TLTN_* arc (link) type
@@ -144,8 +144,7 @@ unset($rolesA);
 # const TARId_DimDefault    = 12; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
 # const TARId_EssenceAlias  = 13; # essence-alias       1  To is Alias of From used by US GAAP for one of their deprecated series of arcroles
 # #onst TARId_DepConcepts   = 14; # dep-aggregateConcept-deprecatedPartConcept 1 From aggregate concept To deprecated part concept'], etc added by build for US GAAP
-# #onst TARId_LastDeclarationArcole = xx; #             1  Defined in /inc/tx/TxName/ConstantsTx.inc; # taxonomy specific stuff
-$arcrolesA = [
+$arcrolesAA = [
   ['element-reference',   TLTN_GenLink,      'From element has To reference'],
   ['element-label',       TLTN_GenLink,      'From element has To label'],
   ['concept-reference',   TLTN_Reference,    'From element has To reference'],
@@ -162,9 +161,34 @@ $arcrolesA = [
 ];
 
 $ArcroleId=0;
-foreach ($arcrolesA as $arcroleA) # [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
+foreach ($arcrolesAA as $arcroleA) # [ArcsrcroleS => [Id, usedOnN, definition, PacioDef, cyclesAllowed, FileIds, Uses]]
   $ArcRolesMA[$arcroleA[0]] = ['Id' => ++$ArcroleId, 'usedOnN' => $arcroleA[1], 'definition' => NULL, 'PacioDef' => $arcroleA[2], 'cyclesAllowed' => NULL, 'FileIds' => NULL, 'Uses' => 0];
-unset($arcrolesA);
+unset($arcrolesAA);
+
+# Predfine the XBRL Namesspaces to avoid getting them intermingled with taxonomy specific ones re saving only taxonomy elements to the Elements table
+# $NamespacesMA [namespaceS => [NsId, Prefix, FileIds, Num]
+$namespacesAA = [
+  ['http://www.w3.org/1999/xlink',      'xlink'],        # 1
+  ['http://www.w3.org/2001/XMLSchema',  'xsd'],          # 2
+  ['http://www.w3.org/2001/XMLSchema-instance', 'xsi'],  # 3
+  ['http://www.xbrl.org/2003/instance', 'xbrli'],        # 4
+  ['http://www.xbrl.org/2003/linkbase', 'link'],         # 5
+  ['http://www.xbrl.org/2003/XLink',    'xl'],           # 6
+  ['http://xbrl.org/2005/xbrldt',       'xbrldt'],       # 7
+  ['http://www.xbrl.org/2006/ref',      'ref'],          # 8
+  ['http://xbrl.org/2008/label',        'label'],        # 9
+  ['http://xbrl.org/2008/generic',      'gen'],          # 10
+  ['http://xbrl.org/2008/reference',    'reference'],    # 11
+  ['http://www.xbrl.org/dtr/type/numeric', 'num'],       # 12
+  ['http://www.xbrl.org/dtr/type/non-numeric', 'nonnum'],# 13
+  ['http://xbrl.iasb.org/info',         'info']          # 14
+];
+const MaxStdXbrlNsId = 14;
+
+$NsId=0;
+foreach ($namespacesAA as $nsA) # $NamespacesMA  [namespaceS => [NsId, Prefix, FileIds, Num]
+  $NamespacesMA[$nsA[0]] = ['NsId' => ++$NsId, 'Prefix' => $nsA[1], 'FileIds' => NULL, 'Num' => 0];
+unset($namespacesAA);
 
 $XR = new XMLReader();
 
@@ -178,7 +202,7 @@ foreach ($tablesA as $table) {
 
 # Start with $EntryPountUrl set in the BuildTxDB.inc include
 
-# The B code defined $roleA and $arcrolesA here. Might need to bring the equivalent back?
+# The B code defined $roleA and $arcrolesAA here. Might need to bring the equivalent back?
 
 $DB->autocommit(false);
 ###########
@@ -301,8 +325,8 @@ foreach ($ArcRolesMA as $arcrole => $arcroleA) {
 echo "Arcroles inserted.<br>";
 
 # Insert the Namespaces
-# $NsMA [namespace => [NsId, Prefix, FileIds, Num]
-foreach ($NsMA as $ns => $nsA) {
+# $NamespacesMA [namespace => [NsId, Prefix, FileIds, Num]
+foreach ($NamespacesMA as $ns => $nsA) {
   $id = $DB->InsertQuery("Insert Namespaces Set namespace='$ns',Prefix='$nsA[Prefix]',FileIds='$nsA[FileIds]',Num=$nsA[Num]");
   if ($id != $nsA['NsId']) DieNow("Id $id on Namespaces Insert not $nsA[NsId] as expected");
 }
@@ -494,6 +518,7 @@ function Element($nsId) {
           case 'xbrli:positiveIntegerItemType': $v = TETN_PositiveInteger; break;
           case 'xbrli:monetaryItemType':        $v = TETN_Money; break;
           case 'decimal':
+          case 'xs:decimal':                                          # used by US GAAP
           case 'xbrli:decimalItemType':    $v = TETN_Decimal; break;
           case 'xbrli:nonZeroDecimal':     $v = TETN_NonZeroDecimal; break;
           case 'string':
@@ -502,7 +527,7 @@ function Element($nsId) {
           case 'xbrli:stringItemType':     $v = TETN_String;   break;
           case 'xbrli:booleanItemType':    $v = TETN_Boolean;  break;
           case 'xs:date':                                             # used by US GAAP
-          case 'xbrli:dateUnion':                                     # union of xsd:date and xsd:dateTime
+          case 'xbrli:dateUnion':                                     # US GAAP union of xsd:date and xsd:dateTime
           case 'xbrli:dateItemType':       $v = TETN_Date;     break;
           case 'xbrli:gMonthDayItemType':  $v = TETN_MonthDay; break;
           case 'xbrli:gYearItemType':      $v = TETN_Year;     break;
@@ -523,6 +548,7 @@ function Element($nsId) {
           case 'anyURI':                   $v = TETN_Uri;      break;
           case 'xbrli:anyURIItemType':     $v = TETN_Uri;      break;
           case 'anyType':                  $v = TETN_Any;      break;
+          case 'xs:QName':                                            # used by US GAAP
           case 'QName':                    $v = TETN_QName;    break;
           case 'xl:arcType':               $v = TETN_Arc;      break;
           case 'xl:documentationType':     $v = TETN_Doc;      break;
@@ -552,24 +578,26 @@ function Element($nsId) {
           # US GAAP one from http://xbrl.fasb.org/srt/2018/elts/srt-2018-01-31.xsd
           case 'srt-types:extensibleListItemType':  $v = TETN_ExtensibleList; break;
           # US GAAP us-types
-          case 'us-types:gYearListItemType':             $v = TETN_YearList;   break;
-          case 'us-types:perUnitItemType':               $v = TETN_PerUnit;        break;
-          case 'us-types:threeDigitItemType':            $v = TETN_ThreeDigits;    break;
-          case 'us-types:nineDigitItemType':             $v = TETN_NineDigits;     break;
+          case 'us-types:gYearListItemType':             $v = TETN_YearList;    break;
+          case 'us-types:perUnitItemType':               $v = TETN_PerUnit;     break;
+          case 'us-types:threeDigitItemType':            $v = TETN_ThreeDigits; break;
+          case 'us-types:nineDigitItemType':             $v = TETN_NineDigits;  break;
           case 'us-types:authorizedUnlimitedItemType':   $v = TETN_AuthorizedUnlimited; break;
-          case 'us-types:flowItemType':                  $v = TETN_FlowRate;   break;
-          case 'us-types:distributionsReceivedApproach': $v = TETN_DistributionsReceivedApproach; break; # Enumeration "Cumulative earnings", "Nature of distribution"
-          case 'us-types:interestRateItemType':          $v = TETN_InterestRateType; break; #  Enumeration "Floating", "Fixed"
-          case 'us-types:restrictedInvestmentItemType':  $v = TETN_RestrictedInvestmentType; break; #  Enumeration "Restricted Investment", "Restricted Investment Exempt from Registration", "Restricted Investment Not Exempt from Registration"
-          case 'us-types:investmentPledgedItemType':     $v = TETN_InvestmentPledgedType;    break; #  Enumeration "Investment Pledged", "Entire Investment Pledged", "Partial Investment Pledged"
-          case 'us-types:investmentOnLoanForShortSalesItemType': $v = TETN_InvestmentOnLoanForShortSalesType; break; # Enumeration "Investment on Loan", "Entire Investment on Loan", "Partial Investment on Loan"
-          case 'us-types:MalpracticeInsurance-OccurrenceOrClaims-madeItemType': $v = TETN_MalpracticeInsuranceClaimsMadeType; break; # Enumeration for "Occurrence", "Claims-made"
-          case 'us-types:fundedStatusItemType':          $v = TETN_FundedStatus; break; # Enum for "Less than 65 percent", "Between 65 and less than 80 percent", "At least 80 percent", "NA"
-          case 'us-types:fundingImprovementAndRehabilitationPlanItemType': $v = TETN_FundingImprovementAndRehabilitationPlanType; break; # Enum "No", "Pending", "Implemented", "Other", "NA"
-          case 'us-types:zoneStatusItemType':            $v = TETN_ZoneStatus; break; # Enum "Green", "Yellow", "Orange", "Red", "Other", "NA"
-          case 'us-types:surchargeItemType':             $v = TETN_SurchargeType; break; # Enum "No", "Yes", "NA"
+          case 'us-types:flowItemType':                  $v = TETN_FlowRate;    break;
+          case 'us-types:distributionsReceivedApproach': $v = TETN_DistributionsReceivedApproach; break; # Enum "Cumulative earnings", "Nature of distribution"
+          case 'us-types:interestRateItemType':          $v = TETN_InterestRateType; break; #  Enum "Floating", "Fixed"
+          case 'us-types:restrictedInvestmentItemType':  $v = TETN_RestrictedInvestmentType; break; #  Enum "Restricted Investment", "Restricted Investment Exempt from Registration", "Restricted Investment Not Exempt from Registration"
+          case 'us-types:investmentPledgedItemType':     $v = TETN_InvestmentPledgedType;    break; #  Enum "Investment Pledged", "Entire Investment Pledged", "Partial Investment Pledged"
+          case 'us-types:investmentOnLoanForShortSalesItemType': $v = TETN_InvestmentOnLoanForShortSales; break; # Enum "Investment on Loan", "Entire Investment on Loan", "Partial Investment on Loan"
+          case 'us-types:MalpracticeInsurance-OccurrenceOrClaims-madeItemType': $v = TETN_MalpracticeInsuranceClaims; break; # Enum for "Occurrence", "Claims-made"
+          case 'us-types:fundedStatusItemType':          $v = TETN_FundedStatus;     break; # Enum for "Less than 65 percent", "Between 65 and less than 80 percent", "At least 80 percent", "NA"
+          case 'us-types:fundingImprovementAndRehabilitationPlanItemType': $v = TETN_FundingImprovementAndRehabilitationPlan; break; # Enum "No", "Pending", "Implemented", "Other", "NA"
+          case 'us-types:zoneStatusItemType':            $v = TETN_ZoneStatus;       break; # Enum "Green", "Yellow", "Orange", "Red", "Other", "NA"
+          case 'us-types:surchargeItemType':             $v = TETN_SurchargeType;    break; # Enum "No", "Yes", "NA"
           case 'us-types:forfeitureMethod':              $v = TETN_ForfeitureMethod; break; # Enum "Estimating expected forfeitures", "Recognizing forfeitures when they occur"
-
+          case 'tin-part:elementListItemType':           $v = TETN_ElementListType;  break; # Pattern \s*(([\i-[:]][\c-[:]]*:)?[\i-[:]][\c-[:]]*(\s+([\i-[:]][\c-[:]]*:)?[\i-[:]][\c-[:]]*)*)?\s*
+          case 'tin-part:TransitionOptionList':          $v = TETN_TransitionOptionList; break; # Enum "Retrospective", "Prospective", "Modified Retrospective", "Modified Prospective"
+          case 'tin-part:AsuNumber':                     $v = TETN_AsuNumber; break; # Pattern [0-9]{4}-[0-9]{2}
           default: DieNow("unknown element type $v");
         }
         break;
@@ -626,8 +654,15 @@ function Element($nsId) {
     }
     $set .= ",$a='$v'";
   }
+  # <xs:element id="tin-part_PublishDate" name="PublishDate" substitutionGroup="link:part" type="xs:gYearMonth">
+  #   <xs:annotation>
+  #     <xs:documentation xml:lang="en">
+  #     Publish date for Taxonomy Implementation Note in [YYYY-MM] format
+  #     </xs:documentation>
+  #   </xs:annotation>
+  # </xs:element>
   while (($NodeX+1) < $NumNodes && $NodesA[$NodeX+1]['depth'] > $depth) {
-    switch ($NodesA[++$NodeX]['tag']) {
+    switch (StripPrefix($NodesA[++$NodeX]['tag'])) {
       case 'annotation':    break; # / - skip as spec says not required to show doc other than via labels
       case 'documentation': break; # |
       #ase 'complexType':   ComplexType($tuple); break; # $set .= (',ComplexTypeId=' . ComplexType()); break;
@@ -637,7 +672,7 @@ function Element($nsId) {
     }
   }
 
-  #f ($nsId != TaxonomyElementNsId) return;  # Don't store elements with other than this namespace
+  if ($nsId <= MaxStdXbrlNsId) return;  # Don't store std XBRL elements - just the taxonomy ones
   if (!$TesgN || $TesgN>=TESGN_LinkPart) return;  # Don't store elements no SG or other than Item to LinkPart
     # #onst TESGN_None        0; # NULL                  Num     Elements with no SG are not stored in the Elements table
     # const TESGN_Item      = 1; # xbrli:item           4717 /- only store items with these SGHs
@@ -948,6 +983,7 @@ B    <link:labelArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-labe
 #     TLTN_Definition TLTN_Presentation TLTN_Calculation TLTN_Label TLTN_Reference TLTN_GenLink  TLTN_Footnote
 function Arc($tltN, $pRoleId) {
   global $DB, $NodesA, $NodeX, $XidsMI, $LocLabelToIdA; # $XidsMI [xidS  => ElId], $LocLabelToIdA [label => [[id, TAFTT_Element | TAFTT_Label | TAFTT_Ref | TAFTT_Role]]] can have multiple entries for the same label
+  static $sNumFrom =1, $sNumTo = 1;
   $node = $NodesA[$NodeX];
   #DumpExport("Node $NodeX in Arc()", $node);
   if ($node['attributes']['xlink:type'] != 'arc')   DieNow('arc type not arc');
@@ -962,19 +998,17 @@ function Arc($tltN, $pRoleId) {
       case 'from':
         if (!isset($LocLabelToIdA[$v])) DieNow("Arc From=$v not set in \$LocLabelToIdA['$v'])");
         $fromIdsA = $LocLabelToIdA[$v];
-        if (count($fromIdsA) > 1)
-          #DumpExport('LocLabelToIdA in Arc() - Multiple Arc Froms <==========', $LocLabelToIdA);
-          #DumpNode(sprintf('Multiple (%d) Arc Froms <==========', count($fromIdsA)));
-          echo sprintf('%d multiple From %s Arcs in node %d <==========<br>', count($fromIdsA), $v, $NodeX);
+        if (count($fromIdsA) > $sNumFrom)
+          #DumpNode(sprintf('Multiple (%d) Arc Froms <==========', $sNumFrom = count($fromIdsA)));
+          echo sprintf('%d multiple From %s Arcs in node %d <==========<br>', $sNumFrom = count($fromIdsA), $v, $NodeX);
         continue 2;
       case 'to':
         if (!isset($LocLabelToIdA[$v])) DieNow("Arc To=$v not set in \$LocLabelToIdA['$v'])");
         $toIdsA = $LocLabelToIdA[$v];
         # To types can be deduced from Arcs.TltN and ArcroleId but might not have the arcroleId yet so do this check later
-        if (count($toIdsA) > 1)
-          #DumpExport('LocLabelToIdA in Arc() - Multiple Arc Tos <==========', $LocLabelToIdA);
-          #DumpNode(sprintf('Multiple (%d) Arc Tos <==========', count($toIdsA)));
-          echo sprintf('%d multiple To %s Arcs in node %d <==========<br>', count($toIdsA), $v, $NodeX);
+        if (count($toIdsA) > $sNumTo)
+          #DumpNode(sprintf('Multiple (%d) Arc Tos <==========', $sNumTo = count($toIdsA)));
+          echo sprintf('%d multiple To %s Arcs in node %d <==========<br>', $sNumTo = count($toIdsA), $v, $NodeX);
         continue 2;
       case 'arcrole':           $a = 'ArcroleId';       $v = $arcroleId = UpdateArcrole($v, $tltN); break;
       case 'preferredLabel':    $a = 'PrefLabelRoleId'; $v = UpdateRole($v);    break; #, $node['tag']);
@@ -1204,20 +1238,19 @@ function GetDoc() {
 } */
 
 function AddNamespace($prefix, $ns) {
-  global $FileId, $NsMA; # $NsMA [namespace => [NsId, Prefix, FileIds, Num]
-  static $sNsId = 0;
-  if (isset($NsMA[$ns])) {
-    if (!InStr(",$FileId,", ",{$NsMA[$ns]['FileIds']},"))
-      $NsMA[$ns]['FileIds'] .= ",$FileId";
-    $NsMA[$ns]['Num']++;
-    return $NsMA[$ns]['NsId'];
+  global $NsId, $NamespacesMA, $FileId; # $NamespacesMA [namespace => [NsId, Prefix, FileIds, Num]
+  if (isset($NamespacesMA[$ns])) {
+    if (!InStr(",$FileId,", ",{$NamespacesMA[$ns]['FileIds']},"))
+      $NamespacesMA[$ns]['FileIds'] .= ",$FileId";
+    $NamespacesMA[$ns]['Num']++;
+    return $NamespacesMA[$ns]['NsId'];
   }
   $prefix = ($prefix > 'xmlns' && ($colon = strpos($prefix, ':')) > 0) ? substr($prefix, $colon+1) : '';
   if (!strlen($prefix))
     # if no "prefix" or short form of the NS use the last url segment that isn't a date
     $prefix = LastNonDateSegment($ns);
-  $NsMA[$ns] = ['NsId' => ++$sNsId, 'Prefix'=>$prefix, 'FileIds'=>$FileId, 'Num'=>1];
-  return $sNsId;
+  $NamespacesMA[$ns] = ['NsId' => ++$NsId, 'Prefix'=>$prefix, 'FileIds'=> "$FileId", 'Num' => 1];
+  return $NsId;
 }
 
 function Insert($table, $set) {
@@ -1604,6 +1637,16 @@ function ComplexType($tuple=0) {
       </restriction>
   </simpleType>
   </attribute>
+
+<xs:simpleType name="TransitionOptionList">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="Retrospective"/>
+    <xs:enumeration value="Prospective"/>
+    <xs:enumeration value="Modified Retrospective"/>
+    <xs:enumeration value="Modified Prospective"/>
+  </xs:restriction>
+</xs:simpleType>
+
 */
 # Process re stepping over nodes but don't store
 function SimpleType() {
@@ -1638,14 +1681,18 @@ function SimpleType() {
           }
           break;
         case 'token':   # /- expect a set of enumeration values
-        case 'NMTOKEN': # |
+        case 'NMTOKEN': # |         or a pattern
         case 'string':  # |
-          $enums = '';
-          while (($NodeX+1) < $NumNodes && StripPrefix($NodesA[$NodeX+1]['tag']) == 'enumeration') {
-            $enums .= ',' . $NodesA[++$NodeX]['attributes']['value'];
+          if (($NodeX+1) < $NumNodes && StripPrefix($NodesA[$NodeX+1]['tag']) == 'pattern')
+            $set .= ",Pattern='" . $NodesA[++$NodeX]['attributes']['value'] . "'";
+          else{
+            $enums = '';
+            while (($NodeX+1) < $NumNodes && StripPrefix($NodesA[$NodeX+1]['tag']) == 'enumeration') {
+              $enums .= ',' . $NodesA[++$NodeX]['attributes']['value'];
+            }
+            if (!($enums = substr($enums, 1))) DieNow("no enum list for simpleType base=$base");
+            $set .= ",EnumList='$enums'";
           }
-          if (!($enums = substr($enums, 1))) DieNow("no enum list for simpleType base=$base");
-          $set .= ",EnumList='$enums'";
           break;
         case 'decimal': # expect nothing or minExclusive or maxExclusive. Put them straight it
           if (($NodeX+1) < $NumNodes && $NodesA[$NodeX+1]['depth'] == $depth+2) { # +2 for restriction then minExclusive or maxExclusive
@@ -1878,20 +1925,20 @@ function LastNonDateSegment($uri) {
 # ======
 # Crude error exit - die a sudden death but commit first re viewing progress
 function DieNow($msg) {
-  global $DB, $NodeX, $NodesA, $File, $FileId, $LinkbaseId;
+  global $DB, $NodeX, $NodesA, $NumNodes, $File, $FileId, $LinkbaseId;
   $DB->commit();
   if ($NodeX >= 0) {
     if ($LinkbaseId > 0)
-      DumpExport("Dying at Node $NodeX in Linkbase $LinkbaseId $File", $NodesA[$NodeX]);
+      DumpExport("Dying at node $NodeX of $NumNodes in Linkbase $LinkbaseId $File", $NodesA[$NodeX]);
     else
-      DumpExport("Dying at Node $NodeX in Schema $FileId $File", $NodesA[$NodeX]);
+      DumpExport("Dying at node $NodeX of $NumNodes in Schema $FileId $File", $NodesA[$NodeX]);
   }
   die("Die - $msg");
 }
 
 function DumpNode($msg) {
-  global $NodeX, $NodesA, $File;
-  DumpExport("In node $NodeX of $File $msg", $NodesA[$NodeX]);
+  global $NodeX, $NodesA, $NumNodes, $File;
+  DumpExport("In node $NodeX of $NumNodes in $File $msg", $NodesA[$NodeX]);
 }
 
 ##########################

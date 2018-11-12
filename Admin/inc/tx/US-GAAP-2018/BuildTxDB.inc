@@ -28,10 +28,8 @@ $entryPointUrl = 'http://xbrl.fasb.org/us-gaap/2018/entire/us-gaap-entryPoint-al
 #entryPointUrl = 'http://xbrl.fasb.org/us-gaap/2018/entire/us-gaap-entryPoint-std-2018-01-31.xsd';
 
 # X => [SchemaId at which the missing schema is to be imported, url]
-$MissedScemasAA = [[22, 'https://xbrl.sec.gov/currency/2017/currency-2017-01-31.xsd']]; # 21 is http://xbrl.sec.gov/country/2017/country-2017-01-31.xsd
-
-const TaxonomyElementNsId = 2; # NS ?
-
+#MissedScemasAA = [[22, 'https://xbrl.sec.gov/currency/2017/currency-2017-01-31.xsd']]; # 21 is http://xbrl.sec.gov/country/2017/country-2017-01-31.xsd  <== Needed with std ep not all
+$MissedScemasAA = [[NULL]];
 
 /*
 

@@ -352,7 +352,7 @@ Ref:   RoleId in range TRId_Reference to TRId_CommonPracticeRef
 ## Elements ## http://www.schemacentral.com/sc/xsd/e-xsd_element-1.html
 ##############
 CREATE TABLE Elements (
-  Id           mediumint unsigned not null auto_increment,
+  Id            smallint unsigned not null auto_increment,
   NsId          tinyint  unsigned not null, # Namespaces.Id of the target namespace of the schema
   TetN          tinyint  unsigned     null, # TETN_* enum for element type e.g. TETN_Money, TETN_String ....
   TesgN         tinyint  unsigned     null, # TESGN_* enum for substitutionGroup e.g. TESGN_Item ....
@@ -372,7 +372,8 @@ CREATE TABLE Elements (
   Primary Key (Id),
           Key (name)                     # Can have duplicate names, one concrete, one abstract e.g. documentation. Found can have other
 #  Unique Key NameIdNsId (NameId,NsId)   #  duplicate names with abstract the same but ns and thus id different e.g. OrdinaryShareClass1
-) CHARSET=utf8;  #  id is not mandatory, but NameId,NsId works as a unique key if required.
+) CHARSET=utf8;
+  #  id is not mandatory, but NameId,NsId works as a unique key if required.
                                          #  For now using just NameId as name will be the most common lookup key other than Id
                                          #  May find it desirable to add Nsid and/or the unique key, and/or possibly IdId
 # Max length:

@@ -12,10 +12,7 @@ https://www.ifrs.org/-/media/feature/standards/taxonomy/2018/ifrs-taxonomy-illus
 History:
 2018.10.27 Started
 2018.11.08 DimId_Max and HyId_Max taken OoS
-2018.11.11 TARId_LastDeclarationArcole added
 */
-
-const TARId_LastDeclarationArcole = TARId_EssenceAlias;
 
 # DiMeIds
 # const DiMeId_PyaAmount           =  23;
@@ -98,6 +95,15 @@ const TARId_LastDeclarationArcole = TARId_EssenceAlias;
 /*
 Notes and comments re IFRS 2018
 
+4992 Elements.StdLabel updated.
+19 Elements.TerseLabel updated.
+
+54 Schemas and 270 Linkbases imported (324 files) comprising 88688 nodes.
+
+Done in 135.4 secs
+
+
+# of elements 4,992
 
 
 SELECT ElId FROM DimensionMembers group by ElId    546

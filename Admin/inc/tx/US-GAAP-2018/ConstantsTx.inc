@@ -6,5 +6,7 @@ History:
 2018.11.08 Started empty
 */
 
-const TARId_LastDeclarationArcole = 14;
+/*
+Notes and comments re US GAAP 2018
 
+# of elements 19,494

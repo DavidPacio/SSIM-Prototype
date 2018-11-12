@@ -19,7 +19,7 @@ History:
 */
 require '../../inc/BaseTx.inc';
 require '../../inc/tx/ConstantsTx.inc';
-require "../../inc/tx/$TxName/ConstantsTx.inc"; # taxonomy specific stuff
+#equire "../../inc/tx/$TxName/ConstantsTx.inc"; # taxonomy specific stuff
 
 # # List of Tx Elements which have StartEnd values. See Doc/Tx/UK-IFRS-DPL/StartEndPeriodNotes.txt for its derivation.
 # $StartEndTxIdsGA=[788, 1070, 1697, 2235, 2247, 4626, 4633, 4742, 4746, 5783, 6036, 7915, 8524];
@@ -391,11 +391,9 @@ function FromTrees($fromId) {
   # const TARId_DimDefault    = 12; # dimension-default   1  From dimension To default dimension member                 Source (a dimension) declares that there is a default member that is the target of the arc (a member).
   # const TARId_EssenceAlias  = 13; # essence-alias       1  To is Alias of From used by US GAAP for one of their deprecated series of arcroles
   # #onst TARId_DepConcepts   = 14; # dep-aggregateConcept-deprecatedPartConcept 1 From aggregate concept To deprecated part concept'], etc added by build for US GAAP
-  # #onst TARId_LastDeclarationArcole = xx; #             1  Defined in /inc/tx/TxName/ConstantsTx.inc; # taxonomy specific stuff
-
   switch ($TreeChoice) {
-    case 0: $i=TARId_SummationItem;          $end = TARId_LastDeclarationArcole; break; # All
-    case 1: $i=TARId_FirstDeclarationArcole; $end = TARId_LastDeclarationArcole; break; # Definition
+    case 0: $i=TARId_SummationItem;          $end = $DB->OneQuery('Select count(*) from Arcroles'); break; # All
+    case 1: $i=TARId_FirstDeclarationArcole; $end = $DB->OneQuery('Select count(*) from Arcroles'); break; # Definition
     case 2: $i=TARId_ParentChild;            $end = TARId_ParentChild;   break; # Presentation
     case 3: $i=TARId_SummationItem;          $end = TARId_SummationItem; break; # Calculation
   }
