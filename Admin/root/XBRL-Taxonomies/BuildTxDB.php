@@ -771,29 +771,30 @@ function RoleType() {
     $NodeX++;
     $usedOn .= ',' . StripPrefix($NodesA[$NodeX]['txt']); # CS the extra one(s)
   }
-  if (!strpos($roleURI, $idS)) {
-    # $idS is not in the uri
-    $role = substr($roleURI, strrpos($roleURI, '/')+1);
-    # No. Left roles as is re later reference to the role form e.g. <label:label xlink:label="res_3" xlink:role="http://www.xbrl.org/2008/role/label"
-    # #    $idS            $role
-    # # standard-label     label
-    # # verbose-label      verboseLabel
-    # # terse-label        terseLabel
-    # # standard-link-role link
-    # # standard-reference reference
-    # $changedB = false;
-    # switch ($role) {
-    #   case 'label':     $changedB = true; $usingRole = 'standardLabel'; break;
-    #   case 'link':      $changedB = true; $usingRole = 'standardLink';  break;
-    #   case 'reference': $changedB = true; $usingRole = 'standardReference'; break;
-    #   default: $usingRole = $role; break;
-    # }
-    # echo "roleType at node $NodeX of the Schema has an id of '$idS' which differs from the role '$role' from the roleURI '$roleURI'. Using $usingRole<br>";
-    # if ($changedB)
-    #   # change $rolURI so that UpdateRole() will get $usingRole
-    #   $roleURI = str_replace($role, $usingRole, $roleURI);
-    echo "roleType at node $NodeX of the Schema has an id of '$idS' which differs from the role '$role' from the roleURI '$roleURI'. Using $role<br>";
-  }
+  # 2018.11.13 Removed. Lots of these in US GAAP for no purpose. Ignore id effectively.
+  #if (!strpos($roleURI, $idS)) {
+  #  # $idS is not in the uri
+  #  $role = substr($roleURI, strrpos($roleURI, '/')+1);
+  #  # No. Left roles as is re later reference to the role from e.g. <label:label xlink:label="res_3" xlink:role="http://www.xbrl.org/2008/role/label"
+  #  # #    $idS            $role
+  #  # # standard-label     label
+  #  # # verbose-label      verboseLabel
+  #  # # terse-label        terseLabel
+  #  # # standard-link-role link
+  #  # # standard-reference reference
+  #  # $changedB = false;
+  #  # switch ($role) {
+  #  #   case 'label':     $changedB = true; $usingRole = 'standardLabel'; break;
+  #  #   case 'link':      $changedB = true; $usingRole = 'standardLink';  break;
+  #  #   case 'reference': $changedB = true; $usingRole = 'standardReference'; break;
+  #  #   default: $usingRole = $role; break;
+  #  # }
+  #  # echo "roleType at node $NodeX of the Schema has an id of '$idS' which differs from the role '$role' from the roleURI '$roleURI'. Using $usingRole<br>";
+  #  # if ($changedB)
+  #  #   # change $rolURI so that UpdateRole() will get $usingRole
+  #  #   $roleURI = str_replace($role, $usingRole, $roleURI);
+  #  echo "roleType at node $NodeX of the Schema has an id of '$idS' which differs from the role '$role' from the roleURI '$roleURI'. Using $role<br>";
+  #}
   UpdateRole($roleURI, $usedOn, $definition);
 }
 

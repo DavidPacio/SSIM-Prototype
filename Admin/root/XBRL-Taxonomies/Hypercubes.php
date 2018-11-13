@@ -81,8 +81,11 @@ while ($o = $res->fetch_object()) {
            "<tr class='b bg0'><td class=c>Id</td><td>Tx Id Name / Label / Role</td><td>Id</td><td> Tx Id Name / Label / Role / Dimension Members as DiMeId TxId Label</td></tr>\n";
   }
   $hyId   = (int)$o->Id;
-  $dimsA  = explode(COM, $o->Dimensions);
-  $nDims  = count($dimsA);
+  if ($o->Dimensions) {
+    $dimsA  = explode(COM, $o->Dimensions);
+    $nDims  = count($dimsA);
+  }else
+    $nDims = 0;
   $txName = Fold($o->name, 80);
  #$stdLabel = $o->StdLabel;
   $stdLabel = FoldOnSpace($o->StdLabel, 80);
@@ -127,15 +130,15 @@ while ($o = $res->fetch_object()) {
           $stdLabel = $d->StdLabel;
           if ($MediumB) {
             foreach(explode(COM, $d->RoleIds) as $j => $roleId) {
-              $role = Role($roleId, true);
+              $roleS = Role($roleId, true);
               if ($roleId == $hyRoleId)
-                $role .= ' *';
+                $roleS .= ' *';
               #else
-              #  $role = '('.$role.')';
+              #  $roleS = '('.$roleS.')';
               if (!$j)
-                $rolesS = $role;
+                $rolesS = $roleS;
               else
-                $rolesS .= BR.$role;
+                $rolesS .= BR.$roleS;
               $n++;
             }
             echo ($i ? '<tr>' : '') . "<td class=r>$dimId</td><td class=r>$d->ElId</td><td>$stdLabel</td><td>$rolesS";
@@ -177,14 +180,16 @@ while ($o = $res->fetch_object()) {
       }
     } # end of not graphical
   }else{ # empty hypercube
-    if ($ShortB || $GraphicalB)
-      echo "<tr><td class=c>$hyId</td><td>$role</td><td colspan=50></td></tr>\n";
+    if ($GraphicalB)
+      echo "<tr><td class=c>$hyId</td><td colspan=999></td></tr>\n";
+    else if ($ShortB)
+      echo "<tr><td class=c>$hyId</td><td></td><td colspan=2></td></tr>\n";
     else{
       echo "<tr><td class='c top'>$hyId</td>";
       if ($MediumB)
-        echo "<td>$o->ElId</td><td>$txName</td><td>None</td><td colspan=4></td></tr>\n";
+        echo "<td class='r top'>$o->ElId</td><td>$txName<br>$stdLabel<br>$hyRoleS</td><td>None</td><td colspan=3></td></tr>\n";
       else
-        echo "<td>$o->ElId $txName<br>$stdLabel<br>$role</td><td colspan=2></td></tr>\n";
+        echo "<td>$o->ElId $txName<br>$stdLabel<br>$hyRoleS</td><td colspan=2></td></tr>\n";
     }
   }
 }

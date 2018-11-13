@@ -20,8 +20,14 @@ by looking at thedownloaded taxonomy
 
 For available sec taxononomies see https://www.sec.gov/info/edgar/edgartaxonomies.shtml
 
+For entry points see figure 13 page 17 in:
+\Pacio\Data\XBRL-Taxonomies\US-GAAP-2018\2018_USGAAP_Technical_Guide_Final.pdf
+
+us-gaap-entryPoint-all-wotmp-2018-01-31.xsd   DTS includes all components in all folders except Taxonomy Disclosure Templates
 
 */
+
+
 
 #entryPointUrl = 'http://xbrl.fasb.org/us-gaap/2018/elts/us-gaap-std-2018-01-31.xsd';
 $entryPointUrl = 'http://xbrl.fasb.org/us-gaap/2018/entire/us-gaap-entryPoint-all-2018-01-31.xsd';

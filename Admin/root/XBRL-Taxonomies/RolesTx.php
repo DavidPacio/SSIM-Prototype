@@ -22,6 +22,7 @@ while ($o = $res->fetch_object()) {
   if (!($n%50))
     echo "<tr class='b bg0 c'><td>Id</td><td>Role</td><td>Used On</td><td>Definition{/Label{/Reference}}</td><td>Associated Dimension(s) and/or Hypercube(s) if any</td></tr>\n";
   $roleId = (int)$o->Id;
+  $roleS  = Fold($o->Role, 80);
   $usedOn = str_replace(',', ', ', $o->usedOn); # insert spaces after commas re folding
  #$definition = FoldOnSpace($o->definition, 80);
   $definition = $o->definition;
@@ -35,10 +36,10 @@ while ($o = $res->fetch_object()) {
       else # Reference like {"Name":"IAS","Number":"27","IssueDate":"2018-01-01"} so zap the {} and "s
         $definition .= BR.str_replace(['":"', '","', '{', '}', '"'], [': ', ', ', ''], $o2->Text);
     }
-  echo "<tr><td class='r top'>$roleId</td><td class=top>$o->Role</td><td class=top>$usedOn</td><td class=top>$definition</td>";
+  echo "<tr><td class='r top'>$roleId</td><td class=top>$roleS</td><td class=top>$usedOn</td><td class=top>$definition</td>";
   # Associated Dimensions
-  $tdS = '';                   # Select E.Id, E.name from Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=2 and A.ArcroleId<=6 and A.PRoleId=38 Group by A.FromId                    # last definition arcrole Id
-  $res2 = $DB->ResQuery(sprintf('Select E.Id, E.name from Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=%d And A.ArcroleId<=%d and A.PRoleId=%d Order by A.FromId', TESGN_Dimension, TARId_EssenceAlias, $roleId));
+  $tdS = '';                   # Select E.Id, E.name from Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=2 and A.ArcroleId>=7 and A.PRoleId=38 Group by A.FromId
+  $res2 = $DB->ResQuery(sprintf('Select E.Id, E.name from Arcs A Join Elements E on E.Id=A.FromId Where E.TesgN=%d And A.ArcroleId>=%d and A.PRoleId=%d Order by A.FromId', TESGN_Dimension, TARId_FirstDeclarationArcole, $roleId));
   if ($res2->num_rows)
     while ($o2 = $res2->fetch_object())
       $tdS .= "<br>Dim El:$o2->Id ".Fold($o2->name, 100);

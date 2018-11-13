@@ -133,6 +133,40 @@ Ageing.All
 
 */
 
+/*
+Typed Dimensions and typedDomainRef as used by US GAAP
+===================================
+   Id NsId TetN TesgN name                                                  StdLabel                                        TerseLabel PeriodN SignN abstract  nillable  Hypercubes  typedDomainRef                                                                              FileId
+  143   19  6    2    NameChangeEventDateAxis                               Name Change Event Date [Axis]                         NULL  1      NULL  1         1         NULL        #dei_eventDateTime                                                                               9
+15138   24  6    2    RevenueRemainingPerformanceObligationExpectedTimin... Revenue, Remaining Performance Obligation, Expecte... NULL  1      NULL  1         1         NULL        #us-gaap_RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionStartDateAxis.domain  16
+                      RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionStartDateAxis
+                      Revenue, Remaining Performance Obligation, Expected Timing of Satisfaction, Start Date [Axis]
+Doc:
+  143 For a sequence of name change event related facts, use this typed dimension to distinguish them.  The axis members are restricted to be a valid for xml schema 'date' or 'datetime' data type.
+15138 Year in which remaining performance obligation is expected to be recognized, in CCYY format.
+Start date of time band for expected timing of satisfaction of remaining performance obligation, in CCYY-MM-DD format.
+
+The XBRL spec
+http://www.xbrl.org/specification/dimensions/rec-2012-01-25/dimensions-rec-2006-09-18+corrected-errata-2012-01-25-clean.html#sec-typed-dimensions
+
+From \Pacio\Data\XBRL-Taxonomies\US-GAAP-2018\2018_USGAAP_Technical_Guide_Final.pdf
+2.4 Typed Dimensions
+A typed dimension was included in the 2017 Taxonomy Update in the group “606000 - Disclosure - Revenue from Contract with Customer.” The Taxonomy uses this typed dimension to indicate the start date for the period when the remaining performance obligation will be satisfied. It is restricted to a dateItemType, meaning the members must appear in CCYY-MM-DD format. The Taxonomy Implementation Guide for Revenue from Contracts with Customers illustrates usage of this structure. The Taxonomy is likely to utilize more typed dimensions in future Taxonomy releases.
+The typed dimension is identified in the Taxonomy by the presence of the xbrldt:typedDomainRef attribute on the particular dimension.
+
+in Schema 9 http://xbrl.sec.gov/dei/2018/dei-2018-01-31.xsd, 296 nodes read -> Total nodes = 1,181
+<xs:element name="NameChangeEventDateAxis" id="dei_NameChangeEventDateAxis" type="xbrli:stringItemType" xbrli:periodType="duration" abstract="true" nillable="true" substitutionGroup="xbrldt:dimensionItem"
+  xbrldt:typedDomainRef="#dei_eventDateTime"/>
+<xs:element name="eventDateTime" id="dei_eventDateTime" type="xbrli:dateUnion" nillable="true"/>
+
+In Schema 16 http://xbrl.fasb.org/us-gaap/2018/elts/us-gaap-2018-01-31.xsd, 17044 nodes read -> Total nodes = 20,506
+<xs:element abstract="true" id="us-gaap_RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionStartDateAxis" name="RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionStartDateAxis" nillable="true"
+ substitutionGroup="xbrldt:dimensionItem" type="xbrli:stringItemType" xbrldt:typedDomainRef="#us-gaap_RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionStartDateAxis.domain" xbrli:periodType="duration"/>
+<xs:element id="us-gaap_RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionStartDateAxis.domain" name="RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionStartDateAxis.domain" nillable="true" type="xs:date"/>
+
+2018.11.13 Notes only. Nothing is yet being done with the above info.
+
+*/
 echo "<br>$n dimensions and ".$DB->OneQuery('select count(*) from DimensionMembers'). " dimension members added<br>\n";
 
 # Build Hypercubes Table
@@ -269,11 +303,12 @@ $res = $DB->ResQuery('Select Id,RoleId,Dimensions from Hypercubes');
 while ($o = $res->fetch_object()) {
   $hyId   = (int)$o->Id;
   $roleId = (int)$o->RoleId;
-  foreach (explode(COM, $o->Dimensions) as $dimId) {
-    $re2 = $DB->ResQuery("Select ElId from DimensionMembers where DimId=$dimId and RoleId=$roleId");
-    while ($o2 = $re2->fetch_object())
-      $elementsToHysA[(int)$o2->ElId][] = $hyId;
-  }
+  if ($o->Dimensions) # 2 empty ones in US GAAP. Re typedDomainRef?
+    foreach (explode(COM, $o->Dimensions) as $dimId) {
+      $re2 = $DB->ResQuery("Select ElId from DimensionMembers where DimId=$dimId and RoleId=$roleId");
+      while ($o2 = $re2->fetch_object())
+        $elementsToHysA[(int)$o2->ElId][] = $hyId;
+    }
 }
 foreach ($elementsToHysA as $elId => $hyIdsA)
   $DB->StQuery(sprintf('Update Elements Set Hypercubes="%s" where Id=%d', implode(COM, $hyIdsA), $elId));

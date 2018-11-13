@@ -49,7 +49,7 @@ Text
 CREATE TABLE Roles (
   Id          smallint unsigned not null auto_increment,
   Role        tinytext          not null, # Role uri with http://, www. etc stripped to leave only what is necessary to identify the role
-  UsedOn      tinytext          not null, # link:usedOn [1..*]  Can be more than one, CS
+  usedOn      tinytext          not null, # link:usedOn [1..*]  Can be more than one, CS
   definition  tinytext              null, # 10 - Profit and Loss Account
   Uses        smallint unsigned not null, # Number of uses
   FileIds     text              not null, # csv list of Imports.Id(s) of file(s) where defined

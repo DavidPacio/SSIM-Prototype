@@ -150,12 +150,12 @@ due to roles presumably
 /*
 IFRS 2018 numbers:
 Arcs with ArcroleId  =                                     FromId             ToId
-  TARId_HypercubeDim:  285  Hypercubes -> Dimensions       Hypercube el Id    Dimension el Id
-  TARId_DimDomain   :  291  First Dimension members        Dimension el Id    DiMe el Id - not 131 because of different roles. If Dimensions table used only one role per dim then there would be 291 dima rather than 131.
-  TARId_DomainMember: 2897  From domain contains To member Domain    el Id    Member el Id           - vs 1452 found in building DiMes
-  TARId_DimAll      :  150  One for each Hypercube         Abstract El Id     Hypercube el Id e.g. Earnings per share [abstract] -> Earnings per share [table]. Not 146 because of 4 with 2 roles.
-  TARId_DimNotAll   :    0  Not used
-  TARId_DimDefault  :  131  From dimension To default dimension member Dimension el Id    Dimension member el Id Same # as # of Elements with TesgN = TESGN_Dimension = all dimensions have a default
+  TARId_HypercubeDim 7 :  285  Hypercubes -> Dimensions       Hypercube el Id    Dimension el Id
+  TARId_DimDomain    8 :  291  First Dimension members        Dimension el Id    DiMe el Id - not 131 because of different roles. If Dimensions table used only one role per dim then there would be 291 dima rather than 131.
+  TARId_DomainMember 9 : 2897  From domain contains To member Domain    el Id    Member el Id           - vs 1452 found in building DiMes
+  TARId_DimAll      10 :  150  One for each Hypercube         Abstract El Id     Hypercube el Id e.g. Earnings per share [abstract] -> Earnings per share [table]. Not 146 because of 4 with 2 roles.
+  TARId_DimNotAll   11 :    0  Not used
+  TARId_DimDefault  12 :  131  From dimension To default dimension member Dimension el Id    Dimension member el Id Same # as # of Elements with TesgN = TESGN_Dimension = all dimensions have a default
 
 TARId_DomainMember numbers:
 select * from Arcs where ArcroleId=9 Order by FromId,ToId,PRoleId

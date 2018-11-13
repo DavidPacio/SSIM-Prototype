@@ -207,7 +207,6 @@ function ElementInfo($o) {
   # const TRId_ExampleRef        = 14; # exampleRef        reference |
   # const TRId_CommonPracticeRef = 15; # commonPracticeRef reference |
                      # Select R.Id Rid,R.RoleId,R.Text from Arcs A Join Resources R on R.Id=A.ToId where A.TltN in (4,5) and A.FromId=407 Order by R.RoleId,R.Id
-                     # Select R.Id Rid,R.RoleId,R.Text from Arcs A Join Resources R on R.Id=A.ToId where A.ArcroleId in (9,10) and A.FromId=407 Order by R.RoleId,R.Id
   $res = $DB->ResQuery(sprintf('Select R.RoleId,R.Text from Arcs A Join Resources R on R.Id=A.ToId where A.TltN in (%d,%d) and A.FromId=%d Order by R.RoleId,R.Id', TLTN_Label, TLTN_Reference, $elId));
   $firstRefB = true;
   if ($res->num_rows) {
