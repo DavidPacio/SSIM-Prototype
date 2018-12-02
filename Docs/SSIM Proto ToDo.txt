@@ -3,6 +3,9 @@
 Pacio SSIM Proto ToDo
 =====================
 
+Barcodes lookup
+https://www.barcodelookup.com/
+
 ToDo
 ====
 Add Cryptocurrencies
@@ -12,3 +15,6 @@ Consider if separate DBs are needed. Look at BRB class code re separate DBs
 Document coding conventions: in progress in M:\Pacio\Development\SSIM Proto\Docs\SSIM Proto.txt
 
 Tx Import - ToDos in TreePad
+
+
+

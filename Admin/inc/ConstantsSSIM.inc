@@ -1,6 +1,4 @@
-<?php /*
-
-inc/ConstantsSSIM.inc
+<?php /* inc/ConstantsSSIM.inc
 
 SSIM Constants
 
@@ -16,8 +14,15 @@ Replace Level in $BroInfoA by SetMaxId
 Add DefaultPMemId to $BroInfoA
 Add Set is StartEnd and kids are not e.g. Tx542 re Import StartEnd processing.
 
-
 */
+
+# Data Types Constants
+# ====================
+
+# Enums
+const SSIM_DT_TypeN_Simple = 1; # "Simple" single item data types
+
+
 
 # Ontologies.TypeN Enums
 # ----------------------

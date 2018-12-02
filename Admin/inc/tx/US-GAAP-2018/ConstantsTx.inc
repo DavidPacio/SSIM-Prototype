@@ -36,14 +36,24 @@ CompensationRelatedCostsGeneralScheduleOfDeferredCompensationArrangementWithIndi
 --
 
 Max element name length 185:
-
 Id 14204
-
 name
 QualitativeAndQuantitativeInformationAssetsOrLiabilitiesForTransferorsContinuingInvolvementInSecuritizationOrAssetbackedFinancingArrangementNotPreviouslyRequiredFinancialSupportProvided
-
 StdLabel
 Qualitative and Quantitative Information, Transferor's Continuing Involvement, Not Previously Required Financial Support (Deprecated 2016-01-31)
+
+Longest role 193 characters
+Id 431
+CompensationRelatedCostsGeneralScheduleOfDeferredCompensationArrangementWithIndividualExcludingShareBasedPaymentsAndPostretirementBenefitsByTitleOfIndividualAndByTypeOfDeferredCompensationTable
+705000 - Disclosure - Compensation Related Costs, General, Schedule of Deferred Compensation Arrangement with Individual, Excluding Share-based Payments and Postretirement Benefits, by Title of Individual and by Type of Deferred Compensation [Table]
+
+vs IFRS 31 characters
+Id 105
+ifrs_12_2018-03-16_role-825700a
+[825700a] Notes - Interests in other entities
+
+and 39 similar 31 character long ones
+
 
 ---
 
@@ -81,6 +91,7 @@ Elements with TesgN  =  US G  IFRS
   See notes in BuildHypercubesDimensions.php
 
 • handle deprecated elements
-  See 2018_USGAAP_Technical_Guide_Final.pdf
-  section 7 Deprecated Element Relationships
+  See 2018_USGAAP_Technical_Guide_Final.pdf section 7 Deprecated Element Relationships
+  and GAAP-Taxonomy-ReleaseNotes-2018-01-31_Final.pdf section 4.1 Deprecated Items
+
 

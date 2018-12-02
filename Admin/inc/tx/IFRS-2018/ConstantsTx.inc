@@ -82,10 +82,6 @@ History:
 # ---------------------
 # Constants from ConstantsRg.inc used
 
-###################
-# Ids and Globals #
-###################
-
 # const ElId_NotApplicable  = 4815;
 # const ElId_EmptyHypercube = 4459;
 #
@@ -93,18 +89,31 @@ History:
 # $StartEndTxIdsGA=[788, 1070, 1697, 2235, 2247, 4626, 4633, 4742, 4746, 5783, 6036, 7915, 8524];
 
 /*
-Notes and comments re IFRS 2018
 
-4992 Elements.StdLabel updated.
+###################################
+# Notes and comments re IFRS 2018 #
+###################################
+
+4,992 Elements.StdLabel updated.
 19 Elements.TerseLabel updated.
 
-54 Schemas and 270 Linkbases imported (324 files) comprising 88688 nodes.
+54 Schemas and 270 Linkbases imported (324 files) comprising 88,688 nodes.
 
 Done in 135.4 secs
 
 
-# of elements 4,992
+Longest element name: 234 characters
+Id 3203
+IncreaseDecreaseThroughReclassificationAdjustmentsInPeriodReserveOfGainsAndLossesOnFinancialAssetsMeasuredAtFairValueThroughOtherComprehensiveIncomeRelatedToInsuranceContractsToWhichParagraphsC18bC19bC24bAndC24cOfIFRS17HaveBeenApplied
 
+Longest role 31 characters
+Id 105
+ifrs_12_2018-03-16_role-825700a
+[825700a] Notes - Interests in other entities
+
+and 39 similar 31 character long ones
+
+---
 
 SELECT ElId FROM DimensionMembers group by ElId    546
 SELECT * FROM Elementswhere Hypercubes is not NULL 536
