@@ -48,12 +48,12 @@ CREATE TABLE Visits (
 ## DataTypes ##
 ###############
 CREATE TABLE DataTypes (
-  Id     smallint unsigned not null auto_increment,
-  Name    varchar(30)      not null, # Short form name of Ontology, no spaces e.g. XBRL-IFRS-2018. Verbose name is held in Descr
-  TypeN   tinyint unsigned not null, # SSIM_Roles_RoleN_Report, SSIM_Roles_RoleN_Note, SSIM_Roles_RoleN_Prop, SSIM_Roles_RoleN_Folio
-  Bits    tinyint unsigned not null, # Bit settings for the Ontology
-  Data    text             not null, # The jsonised data as below, retrieved via EntityType($o) as an Object
-  Primary Key (Id)
+  Id      smallint unsigned not null auto_increment,
+  Name    varchar(30)       not null, # Name of DataType
+  Bits    smallint unsigned not null, # Bit settings for the DataType from the SSIM_DTB_* bits
+  Doc     text              not null, # Doc about the data type
+  Primary Key (Id),
+          Key (Name)
 ) Charset=utf8;
 
 

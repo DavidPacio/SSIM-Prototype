@@ -19,9 +19,22 @@ Add Set is StartEnd and kids are not e.g. Tx542 re Import StartEnd processing.
 # Data Types Constants
 # ====================
 
-# Enums
-const SSIM_DT_TypeN_Simple = 1; # "Simple" single item data types
-
+# Data type Bit Settings
+# ----------------------           Bit
+#                            0       Null data type used when the SSID description from the Facts Directories is the data e.g. a country shown externally as the country name in the human language of choice, 3 letter code, or 2 letters code according to formatting options
+const SSIM_DTB_Base     =    1; #  1 Is a base data type for one item of data. Base types are intuitive and suitable for many simple cases e.g. most facts in the SSIM Facts Directories.
+const SSIM_DTB_Limits   =    2; #  2 Has limits or restrictions set in addition to any intrinsic range limits of the data type
+const SSIM_DTB_Complex  =    4; #  3 Complex = multiple item data type. The data type is 'simple' or a single item data type if this bit is not set.
+const SSIM_DTB_Custom   =    8; #  4 Custom  = own type created/specified by an app or entity
+const SSIM_DTB_Numeric  =   16; #  5 A numeric type
+const SSIM_DTB_DateTime =   32; #  6 A date/time type
+const SSIM_DTB_String   =   64; #  7 A string type
+const SSIM_DTB_TextData =  128; #  8 Text encoded data such as Json or XML data
+const SSIM_DTB_Blob     =  256; #  9 Blob or binary data
+const SSIM_DTB_File     =  512; # 10 A file = binary data with meaning according to file type
+const SSIM_DTB_Json     = 1024; # 11 Json type
+const SSIM_DTB_Ssim     = 2048; # 12 SSIM type
+const SSIM_DTB_XML      = 4096; # 13 XML type
 
 
 # Ontologies.TypeN Enums
