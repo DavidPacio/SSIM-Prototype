@@ -27,16 +27,17 @@ const SSIM_DTB_Limits   =     2; #  2 Has limits or restrictions set in addition
 const SSIM_DTB_TextData =     4; #  3 Text encoded data such as Json or XML
 const SSIM_DTB_Custom   =     8; #  4 Custom = own type created/specified by an app or entity
 const SSIM_DTB_Number   =    16; #  5 A numeric type
-const SSIM_DTB_String   =    32; #  6 A string type
-const SSIM_DTB_DateTime =    64; #  7 A date/time type
-const SSIM_DTB_Object   =   128; #  8 An object
-const SSIM_DTB_Array    =   256; #  9 An array
-const SSIM_DTB_Blob     =   512; # 10 Blob or binary data
-const SSIM_DTB_File     =  1024; # 11 A file = binary data with meaning according to file type
-const SSIM_DTB_Base     =  2048; # 12 Is a base data type for one item of data. Base types are intuitive and suitable for many simple cases e.g. most facts in the SSIM Facts Directories.
-const SSIM_DTB_Json     =  4096; # 13 Json type
-const SSIM_DTB_Std      =  8192; # 14 Standard SSIM type
-const SSIM_DTB_XML      = 16384; # 15 XML type
+const SSIM_DTB_Money    =    32; #  6 A money type
+const SSIM_DTB_String   =    64; #  7 A string type
+const SSIM_DTB_DateTime =   128; #  8 A date/time type
+const SSIM_DTB_Object   =   256; #  9 An object
+const SSIM_DTB_Array    =   512; # 10 An array
+const SSIM_DTB_Blob     =  1024; # 11 Blob or binary data
+const SSIM_DTB_File     =  2048; # 12 A file = binary data with meaning according to file type
+const SSIM_DTB_Base     =  4096; # 13 Is a base data type for one item of data. Base types are intuitive and suitable for many simple cases e.g. most facts in the SSIM Facts Directories.
+const SSIM_DTB_Json     =  8192; # 14 Json type
+const SSIM_DTB_Std      = 16384; # 15 Standard SSIM type
+const SSIM_DTB_XML      = 32768; # 16 XML type
 
 # Ontologies.TypeN Enums
 # ----------------------
