@@ -48,104 +48,16 @@ CREATE TABLE Visits (
 ## DataTypes ##
 ###############
 CREATE TABLE DataTypes (
-  Id      smallint unsigned not null auto_increment,
-  Name    varchar(30)       not null, # Name of DataType
-  Bits    smallint unsigned not null, # Bit settings for the DataType from the SSIM_DTB_* bits
-  Doc     text              not null, # Doc about the data type
+  Id        smallint unsigned not null auto_increment,
+  Bits       tinyint unsigned not null, # Bit settings for the DataType from the SSIM_DTB_* bits
+  TypeN      tinyint unsigned not null, # Type of the data type:    SSIM_DT_TypeN_*
+  SubTypeN   tinyint unsigned not null, # SubType of the data type: SSIM_DT_SubTypeN_*
+  Attributes text                 null, # jsonised attributes
+  Name       varchar(50)      not null, # Name of the data type - can be built up from the TypeN, SubTypeN, and Attributes values
+  Doc        text             not null, # Doc about the data type
   Primary Key (Id),
           Key (Name)
 ) Charset=utf8;
-
-
-# Taxonomy Elements.TetN enum Had 26 types for IFRS
-# ---------------------------                              Num    UK GAAP Num
-#onst TETN_None             0; # NULL                              181
-const TETN_Integer       =  1; # xbrli:integerItemType               9
-const TETN_PositiveInteger= 2; # xbrli:positiveIntegerItemType
-const TETN_Money         =  3; # xbrli:monetaryItemType           3247
-const TETN_Decimal       =  4; # xbrli:decimalItemType              46            decimal   1
-const TETN_NonZeroDecimal=  5; # xbrli:nonZeroDecimal                1
-const TETN_String        =  6; # xbrli:stringItemType             1362            string   55
-const TETN_Boolean       =  7; # xbrli:booleanItemType              28
-const TETN_Date          =  8; # xbrli:dateItemType                 36
-const TETN_MonthDay      =  9; # xbrli:gMonthDayItemType
-const TETN_Year          = 10; # xbrli:gYearItemType
-const TETN_YearMonth     = 11; # xbrli:gYearMonthItemType
-const TETN_Duration      = 12; # xbrli:durationItemType
-const TETN_Share         = 13; # xbrli:sharesItemType               35
-const TETN_Area          = 14; # num:areaItemType
-const TETN_Energy        = 15; # num:energyItemType
-const TETN_Mass          = 16; # num:massItemType
-const TETN_Percent       = 17; # num:percentItemType
-const TETN_PerShare      = 18; # num:perShareItemType
-const TETN_Volume        = 19; # num:volumeItemType
-const TETN_DomainItem    = 20; # nonnum:domainItemType     562
-const TETN_TextBlock     = 21; # nonnum:textBlockItemType
-const TETN_PureItem      = 22; # xbrli:pureItemType
-const TETN_Uri           = 23; # xbrli:anyURIItemType                4            anyURI    1
-const TETN_Any           = 24; # anyType                             2
-const TETN_QName         = 25; # QName                               2
-const TETN_Arc           = 26; # xl:arcType                          5
-const TETN_Doc           = 27; # xl:documentationType                2
-const TETN_Extended      = 28; # xl:extendedType                     1
-const TETN_Locator       = 29; # xl:locatorType                      2
-const TETN_Resource      = 30; # xl:resourceType                     1
-const TETN_Simple        = 31; # xl:simpleType                       2            anySimpleType   1
-const TETN_Title         = 32; # xl:titleType                        1
-const TETN_GenArc        = 33; # gen:genericArcType
-const TETN_Link          = 34; # gen:linkTypeWithOpenAttrs
-# US GAAP ones from http://xbrl.sec.gov/dei/2018/dei-2018-01-31.xsd
-const TETN_IndexKey              = 35; # dei:centralIndexKeyItemType       Restriction: 10 digits
-const TETN_CountryCode           = 36; # dei:countryItemType      ISO code Restriction: 2 characters, 1st is an uppercase letter, 2nd is an upper case letter or digit
-const TETN_CurrencyCode          = 37; # dei:currencyItemType     ISO code Restriction: 3 letter code, all uppercase
-const TETN_FileNumber            = 38; # dei:fileNumberItemType            Pattern [0-9]{1,3}-[0-9]{1,8}(-.{1,4})?
-const TETN_FilerCategory         = 39; # dei:filerCategoryItemType         Enum "Large Accelerated Filer", "Accelerated Filer", "Non-accelerated Filer, Smaller Reporting Company"
-const TETN_FiscalPeriod          = 40; # dei:fiscalPeriodItemType          Enum "FY", "Q1", "Q2", "Q3", "Q4", "H1", "H2", "M9", "T1", "T2"," T3", "M8", "CY"
-const TETN_InvCompanyCode        = 41; # dei:invCompanyType                Enum "N-1A", "N-1", "N-2", "N-3", "N-4", "N-5", "N-6", "S-1 or S-3", "S-6"
-const TETN_LegalEntityIdentifier = 42; # dei:legalEntityIdentifierItemType Pattern: "[A-Z0-9]{20}"
-const TETN_NineDigitCode         = 43; # dei:nineDigitItemType             Restriction: 9 digits
-const TETN_SubmissionType        = 44; # dei:submissionTypeItemType        Enum "10-K", "10-KT", "10-Q"," 10-QT"," 20-F", "20-FT", "40-F", "485BPOS", "497"", 6-K"," 8-K"," F-1"," F-3", "F-4," "F-9", "F-10," "N-CSR", "N-CSR", "N-Q, ", "POS AM", "S-1", "S-3," "S-4", "S-11"," Other"," N-1A", "NCSR,"" 10"
-const TETN_YesNo                 = 45; # dei:yesNoItemType                 Enum "Yes" or "No"
-# US GAAP one from http://xbrl.sec.gov/invest/2013/invest-2013-01-31.xsd
-const TETN_BuySell               = 46; # invest:foreignCurrencyContractTransactionItemType  Enum "Buy" or "Sell"
-# US GAAP one from http://xbrl.fasb.org/srt/2018/elts/srt-2018-01-31.xsd
-const TETN_ExtensibleList        = 47; # srt-types:extensibleListItemType  Std label suffix [Extensible List]
-# US GAAP us-types
-const TETN_YearList                      = 48; # us-types:gYearListItemType        Allows a list of years e.g. "2015 2016 2017" rather than one as for TETN_Year xbrli:gYearItemType
-const TETN_PerUnit                       = 49; # us-types:perUnitItemType
-const TETN_ThreeDigits                   = 50; # us-types:threeDigitItemType
-const TETN_NineDigits                    = 51; # us-types:nineDigitItemType
-const TETN_AuthorizedUnlimited           = 52; # us-types:authorizedUnlimitedItemType    Enum Unlimited
-const TETN_FlowRate                      = 53; # us-types:flowItemType
-const TETN_DistributionsReceivedApproach = 54; # us-types:distributionsReceivedApproach  Enum "Cumulative earnings", "Nature of distribution"
-const TETN_InterestRateType              = 55; # us-types:interestRateItemType           Enum "Floating", "Fixed"
-const TETN_RestrictedInvestmentType      = 56; # us-types:restrictedInvestmentItemType   Enum "Restricted Investment", "Restricted Investment Exempt from Registration", "Restricted Investment Not Exempt from Registration"
-const TETN_InvestmentPledgedType         = 57; # us-types:investmentPledgedItemType      Enum "Investment Pledged", "Entire Investment Pledged", "Partial Investment Pledged"
-const TETN_InvestmentOnLoanForShortSales = 58; # us-types:investmentOnLoanForShortSalesItemType  Enum "Investment on Loan", "Entire Investment on Loan", "Partial Investment on Loan"
-const TETN_MalpracticeInsuranceClaims    = 59; # us-types:MalpracticeInsurance-OccurrenceOrClaims-madeItemType  Enum for "Occurrence", "Claims-made"
-const TETN_FundedStatus                  = 60; # us-types:fundedStatusItemType Enum "Less than 65 percent", "Between 65 and less than 80 percent", "At least 80 percent", "NA"
-const TETN_FundingImprovementAndRehabilitationPlan = 61; # us-types:fundingImprovementAndRehabilitationPlanItemType  Enum "No", "Pending", "Implemented", "Other", "NA"
-const TETN_ZoneStatus                    = 62; # us-types:zoneStatusItemType   Enum "Green", "Yellow", "Orange", "Red", "Other", "NA"
-const TETN_SurchargeType                 = 63; # us-types:surchargeItemType    Enum "No", "Yes", "NA"
-const TETN_ForfeitureMethod              = 64; # us-types:forfeitureMethod     Enum "Estimating expected forfeitures", "Recognizing forfeitures when they occur"
-const TETN_ElementListType               = 65; # tin-part:elementListItemType  Pattern \s*(([\i-[:]][\c-[:]]*:)?[\i-[:]][\c-[:]]*(\s+([\i-[:]][\c-[:]]*:)?[\i-[:]][\c-[:]]*)*)?\s*
-const TETN_TransitionOptionList          = 65; # tin-part:TransitionOptionList Enum "Retrospective", "Prospective", "Modified Retrospective", "Modified Prospective"
-const TETN_AsuNumber                     = 65; # tin-part:AsuNumber            Pattern [0-9]{4}-[0-9]{2}
-
-# Notes
-# -----
-# For types see https://www.xbrl.org/utr/utr.xml
-# TETN_String is also used for 'string' and 'xbrli:normalizedStringItemType' as used by US GAAP, pending discerning any need for different string types
-# A list of data types used by US GAAP, and the UK specials too, is given here: https://docs.oracle.com/cd/E36352_01/epm.1112/disclosure_mgmt_user/frameset.htm?ch02s03s01s04.html
-
-
-
-
-
-
-
-
-
 
 
 

@@ -20,20 +20,117 @@ Add Set is StartEnd and kids are not e.g. Tx542 re Import StartEnd processing.
 # ====================
 
 # Data Type Bit Settings
-# ----------------------            Bit
-#                             0       Null data type used when the SSID description from the Facts Directories is the data e.g. a country shown externally as the country name in the human language of choice, 3 letter code, or 2 letters code according to formatting options
-const SSIM_DTB_Complex  =     1; #  1 Complex = multiple item data type. The data type is 'simple' or a single item data type if this bit is not set.
-const SSIM_DTB_Limits   =     2; #  2 Has limits or restrictions set in addition to any intrinsic range limits of the data type
-const SSIM_DTB_TextData =     4; #  3 Text encoded data such as Json or XML
-const SSIM_DTB_Custom   =     8; #  4 Custom = own type created/specified by an app or entity
-const SSIM_DTB_Number   =    16; #  5 A numeric type
+# ----------------------        Bit
+const SSIM_DTB_Complex  = 1; #  1 Complex = multiple item data type. The data type is 'simple' or a single item data type if this bit is not set.
+const SSIM_DTB_TextData = 2; #  2 Text encoded data such as Json or XML
+const SSIM_DTB_Custom   = 4; #  3 Custom = own type created/specified by an app or entity
+
+# Data Type TypeN Enums
+# ---------------------
+const SSIM_DT_TypeN_Base = 1; #  1 Base types are intuitive and suitable for many simple cases e.g. most facts in the SSIM Facts Directories.
+const SSIM_DT_TypeN_Json = 2; #  2 Json types
+const SSIM_DT_TypeN_SSIM = 3; #  3 SSIM types
+const SSIM_DT_TypeN_XML  = 4; #  4 XML  types
+const SSIM_DT_TypeN_XBRL = 5; #  5 XBRL types
+
+# Data Type SubTypeN Enums
+# ------------------------
+# For TypeN = SSIM_DT_TypeN_Base            Name          Description
+const SSIM_DT_SubTypeN_Base_Null     = 0; # Base.Null     Null data type used when the SSID description from the Facts Directories is the data e.g. a country shown externally as the country name in the human language of choice, 3 letter code, or 2 letters code according to formatting options
+const SSIM_DT_SubTypeN_Base_Number   = 1; # Base.Number   A base 10 number as commonly understood in text form, like a Json Number
+const SSIM_DT_SubTypeN_Base_DateTime = 2; # Base.DateTime A UTC/GMT date and optionally time in text numeric form year first CCYY.MM.DD{ HH:MM{:SS}}
+const SSIM_DT_SubTypeN_Base_String   = 3; # Base.String   A string of UTF-8 encoded characters
+const SSIM_DT_SubTypeN_Base_Blob     = 4; # Base.Blob     A sequence of binary bytes - a 'blob' of data
+const SSIM_DT_SubTypeN_Base_File     = 5; # Base.File     A file in binary form
+
+# For TypeN = SSIM_DT_TypeN_Json            Name          Description
+const SSIM_DT_SubTypeN_Json_Number   = 1; # Json.Number   A Json number
+const SSIM_DT_SubTypeN_Json_String   = 2; # Json.String   A Json string
+const SSIM_DT_SubTypeN_Json_Oject    = 3; # Json.Oject    A Json object
+const SSIM_DT_SubTypeN_Json_Array    = 4; # Json.Array    A Json array
+
+# For TypeN = SSIM_DT_TypeN_Std              Name            Description
+# Boolean Type
+const SSIM_DT_SubTypeN_Bool          =  1; # Bool            Unsigned 8 bit int, 0 = false, 1 = true
+# Integer Types
+const SSIM_DT_SubTypeN_Int8          =  2; # Int8            Signed 8 bit int
+const SSIM_DT_SubTypeN_UInt8         =  3; # Uint8           Unsigned 8 bit int
+const SSIM_DT_SubTypeN_Int16         =  4; # Int16           Signed 16 bit int
+const SSIM_DT_SubTypeN_Uint16        =  5; # Uint16          Unsigned 16 bit int
+const SSIM_DT_SubTypeN_Int           =  6; # Int             Signed 32 bit int
+const SSIM_DT_SubTypeN_Int32         =  6; # Int32           Signed 32 bit int`  Synonym for Int
+const SSIM_DT_SubTypeN_Uint          =  7; # Uint            Unsigned 32 bit int
+const SSIM_DT_SubTypeN_Uint32        =  7; # Uint32          Unsigned 32 bit int Synonym for Uint
+const SSIM_DT_SubTypeN_Int64         =  8; # Int64           Signed 64 bit int
+const SSIM_DT_SubTypeN_Uint64        =  9; # Uint64          Unsigned 64 bit int
+const SSIM_DT_SubTypeN_Int128        = 10; # Int128          Signed 128 bit int
+const SSIM_DT_SubTypeN_Uint128       = 11; # Uint128         Unsigned 128 bit int
+# Decimal Types
+const SSIM_DT_SubTypeN_Decimal32     = 12; # Decimal32[d]    Signed 32 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Udecimal32    = 13; # Udecimal32[d]   Unsigned 32 bit intr with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Decimal       = 14; # Decimal[d]      Signed 64 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Decimal64     = 14; # Decimal64[d]    Signed 64 bit int with implied decimals d in the attributes array     Synonym for Decimal[d]
+const SSIM_DT_SubTypeN_Udecimal      = 15; # Udecimal[d]     Unsigned 64 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Udecimal64    = 15; # Udecimal64[d]   Unsigned 64 bit int with implied decimals d in the attributes array   Synonym for Udecimal[d]
+const SSIM_DT_SubTypeN_Decimal128    = 16; # Decimal128[d]   Signed 128 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Udecimal128   = 17; # Udecimal128[d]  Unsigned 128 bit int with implied decimals d in the attributes array
+# Money Types
+const SSIM_DT_SubTypeN_Money32       = 18; # Money32[d]      Signed 32 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Umoney32      = 19; # Umoney32[d]     Unsigned 32 bit intr with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Money         = 20; # Money[d]        Signed 64 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Money64       = 20; # Money64[d]      Signed 64 bit int with implied decimals d in the attributes array     Synonym for Money[d]
+const SSIM_DT_SubTypeN_Umoney        = 21; # Umoney[d]       Unsigned 64 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Umoney64      = 21; # Umoney64[d]     Unsigned 64 bit int with implied decimals d in the attributes array   Synonym for Umoney[d]
+const SSIM_DT_SubTypeN_Money128      = 22; # Money128[d]     Signed 128 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Umoney128     = 23; # Umoney128[d]    Unsigned 128 bit int with implied decimals d in the attributes array
+# DateTime Types
+const SSIM_DT_SubTypeN_DateTime      = 24; # DateTime        Unsigned 32 bit int unix style UTC date time - seconds from 1970.01.01
+const SSIM_DT_SubTypeN_DateTime64    = 25; # DateTime64      Unsigned 64 bit int unix style UTC date time - seconds from 1970.01.01
+const SSIM_DT_SubTypeN_DateYear      = 26; # DateYear        Year for years before 1970 including BCE years
+const SSIM_DT_SubTypeN_DateYM        = 27; # DateYM          DateYear + Month 1 to 12 in byte 3
+const SSIM_DT_SubTypeN_DateYMD       = 28; # DateYMD         DateYM + Day 1 to 31 in byte 4
+const SSIM_DT_SubTypeN_DateYMDH      = 29; # DateYMDH        DateYMD + Hour 0 to 23 in byte 5
+const SSIM_DT_SubTypeN_DateYMDHM     = 30; # DateYMDHM       DateYMDH + Minute 0 to 59 in byte 6
+const SSIM_DT_SubTypeN_DateYMDHMS    = 31; # DateYMDHMS      DateYMDHM + Seconds 0 to 59 (60 when leap seconds occur) in byte 7
+const SSIM_DT_SubTypeN_DateYMDHMSMil = 32; # DateYMDHMSMil   DateYMDHMS + Milliseconds 0 to 999 in 2 bytes 8 and 9
+const SSIM_DT_SubTypeN_DateYMDHMSMic = 33; # DateYMDHMSMic   DateYMDHMS + Microseconds 0 to 999,999 in 3 bytes 8 to 10
+const SSIM_DT_SubTypeN_DateYMDHMSNan = 34; # DateYMDHMSNan   DateYMDHMS + Nanoseconds 0 to 999,999,999 in 4 bytes 8 to 11
+# String Type
+const SSIM_DT_SubTypeN_String        = 35; # String          A string of UTF-8 encoded characters
+# Floating Point Types
+const SSIM_DT_SubTypeN_Float         = 36; # Float           IEEE 32 bit (single precision) floating point number
+const SSIM_DT_SubTypeN_Double        = 37; # Double          IEEE 64 bit (double precision) floating point number
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+Attribute Arrays by TypeN
+=========================
+SSIM_DT_TypeN_Base: none
+SSIM_DT_TypeN_Json: none
+SSIM_DT_TypeN_Std:  [Decimals, Min, Max, Incl, Excl] where all are optional ints and Incl + Excl can be a single int or an array of ints
+
+*/
+
+
+
+
+
+
+
 const SSIM_DTB_Money    =    32; #  6 A money type
-const SSIM_DTB_String   =    64; #  7 A string type
-const SSIM_DTB_DateTime =   128; #  8 A date/time type
 const SSIM_DTB_Object   =   256; #  9 An object
 const SSIM_DTB_Array    =   512; # 10 An array
-const SSIM_DTB_Blob     =  1024; # 11 Blob or binary data
-const SSIM_DTB_File     =  2048; # 12 A file = binary data with meaning according to file type
 const SSIM_DTB_Base     =  4096; # 13 Is a base data type for one item of data. Base types are intuitive and suitable for many simple cases e.g. most facts in the SSIM Facts Directories.
 const SSIM_DTB_Json     =  8192; # 14 Json type
 const SSIM_DTB_Std      = 16384; # 15 Standard SSIM type
