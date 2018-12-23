@@ -49,7 +49,7 @@ const SSIM_DT_SubTypeN_Json_String   = 2; # Json.String   A Json string
 const SSIM_DT_SubTypeN_Json_Oject    = 3; # Json.Oject    A Json object
 const SSIM_DT_SubTypeN_Json_Array    = 4; # Json.Array    A Json array
 
-# For TypeN = SSIM_DT_TypeN_Std              Name            Description
+# For TypeN = SSIM_DT_TypeN_SSIM             Name            Description
 # Boolean Type
 const SSIM_DT_SubTypeN_Bool          =  1; # Bool            Unsigned 8 bit int, 0 = false, 1 = true
 # Integer Types
@@ -58,31 +58,31 @@ const SSIM_DT_SubTypeN_UInt8         =  3; # Uint8           Unsigned 8 bit int
 const SSIM_DT_SubTypeN_Int16         =  4; # Int16           Signed 16 bit int
 const SSIM_DT_SubTypeN_Uint16        =  5; # Uint16          Unsigned 16 bit int
 const SSIM_DT_SubTypeN_Int           =  6; # Int             Signed 32 bit int
-const SSIM_DT_SubTypeN_Int32         =  6; # Int32           Signed 32 bit int`  Synonym for Int
+const SSIM_DT_SubTypeN_Int32         =  6; # Int32           Signed 32 bit int`  Alias for Int
 const SSIM_DT_SubTypeN_Uint          =  7; # Uint            Unsigned 32 bit int
-const SSIM_DT_SubTypeN_Uint32        =  7; # Uint32          Unsigned 32 bit int Synonym for Uint
+const SSIM_DT_SubTypeN_Uint32        =  7; # Uint32          Unsigned 32 bit int Alias for Uint
 const SSIM_DT_SubTypeN_Int64         =  8; # Int64           Signed 64 bit int
 const SSIM_DT_SubTypeN_Uint64        =  9; # Uint64          Unsigned 64 bit int
 const SSIM_DT_SubTypeN_Int128        = 10; # Int128          Signed 128 bit int
 const SSIM_DT_SubTypeN_Uint128       = 11; # Uint128         Unsigned 128 bit int
 # Decimal Types
-const SSIM_DT_SubTypeN_Decimal32     = 12; # Decimal32[d]    Signed 32 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Udecimal32    = 13; # Udecimal32[d]   Unsigned 32 bit intr with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Decimal       = 14; # Decimal[d]      Signed 64 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Decimal64     = 14; # Decimal64[d]    Signed 64 bit int with implied decimals d in the attributes array     Synonym for Decimal[d]
-const SSIM_DT_SubTypeN_Udecimal      = 15; # Udecimal[d]     Unsigned 64 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Udecimal64    = 15; # Udecimal64[d]   Unsigned 64 bit int with implied decimals d in the attributes array   Synonym for Udecimal[d]
-const SSIM_DT_SubTypeN_Decimal128    = 16; # Decimal128[d]   Signed 128 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Udecimal128   = 17; # Udecimal128[d]  Unsigned 128 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Decimal32     = 12; # Decimal32[2]    Signed 32 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Udecimal32    = 13; # Udecimal32[2]   Unsigned 32 bit intr with implied decimals 2
+const SSIM_DT_SubTypeN_Decimal       = 14; # Decimal[2]      Signed 64 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Decimal64     = 14; # Decimal64[2]    Signed 64 bit int with implied decimals 2     Alias for Decimal[2]
+const SSIM_DT_SubTypeN_Udecimal      = 15; # Udecimal[2]     Unsigned 64 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Udecimal64    = 15; # Udecimal64[2]   Unsigned 64 bit int with implied decimals 2   Alias for Udecimal[2]
+const SSIM_DT_SubTypeN_Decimal128    = 16; # Decimal128[2]   Signed 128 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Udecimal128   = 17; # Udecimal128[2]  Unsigned 128 bit int with implied decimals 2
 # Money Types
-const SSIM_DT_SubTypeN_Money32       = 18; # Money32[d]      Signed 32 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Umoney32      = 19; # Umoney32[d]     Unsigned 32 bit intr with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Money         = 20; # Money[d]        Signed 64 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Money64       = 20; # Money64[d]      Signed 64 bit int with implied decimals d in the attributes array     Synonym for Money[d]
-const SSIM_DT_SubTypeN_Umoney        = 21; # Umoney[d]       Unsigned 64 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Umoney64      = 21; # Umoney64[d]     Unsigned 64 bit int with implied decimals d in the attributes array   Synonym for Umoney[d]
-const SSIM_DT_SubTypeN_Money128      = 22; # Money128[d]     Signed 128 bit int with implied decimals d in the attributes array
-const SSIM_DT_SubTypeN_Umoney128     = 23; # Umoney128[d]    Unsigned 128 bit int with implied decimals d in the attributes array
+const SSIM_DT_SubTypeN_Money32       = 18; # Money32[2]      Signed 32 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Umoney32      = 19; # Umoney32[2]     Unsigned 32 bit intr with implied decimals 2
+const SSIM_DT_SubTypeN_Money         = 20; # Money[2]        Signed 64 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Money64       = 20; # Money64[2]      Signed 64 bit int with implied decimals 2     Alias for Money[2]
+const SSIM_DT_SubTypeN_Umoney        = 21; # Umoney[2]       Unsigned 64 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Umoney64      = 21; # Umoney64[2]     Unsigned 64 bit int with implied decimals 2   Alias for Umoney[2]
+const SSIM_DT_SubTypeN_Money128      = 22; # Money128[2]     Signed 128 bit int with implied decimals 2
+const SSIM_DT_SubTypeN_Umoney128     = 23; # Umoney128[2]    Unsigned 128 bit int with implied decimals 2
 # DateTime Types
 const SSIM_DT_SubTypeN_DateTime      = 24; # DateTime        Unsigned 32 bit int unix style UTC date time - seconds from 1970.01.01
 const SSIM_DT_SubTypeN_DateTime64    = 25; # DateTime64      Unsigned 64 bit int unix style UTC date time - seconds from 1970.01.01

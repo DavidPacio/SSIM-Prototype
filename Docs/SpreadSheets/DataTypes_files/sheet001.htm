@@ -1,0 +1,179 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 15">
+<link id=Main-File rel=Main-File href="../DataTypes.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(0);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../DataTypes.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link="#0563C1" vlink="#954F72">
+
+<table border=0 cellpadding=0 cellspacing=0 width=1530 style='border-collapse:
+ collapse;table-layout:fixed;width:1146pt'>
+ <col width=95 style='mso-width-source:userset;mso-width-alt:3225;width:71pt'>
+ <col width=229 style='mso-width-source:userset;mso-width-alt:7799;width:171pt'>
+ <col width=663 style='mso-width-source:userset;mso-width-alt:22613;width:497pt'>
+ <col width=132 style='mso-width-source:userset;mso-width-alt:4488;width:99pt'>
+ <col width=343 style='mso-width-source:userset;mso-width-alt:11690;width:257pt'>
+ <col width=68 style='width:51pt'>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl67 colspan=2 width=324 style='height:14.25pt;
+  mso-ignore:colspan;width:242pt'>SSIM Base Data Types</td>
+  <td width=663 style='width:497pt'></td>
+  <td width=132 style='width:99pt'></td>
+  <td width=343 style='width:257pt'></td>
+  <td width=68 style='width:51pt'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'>Base data
+  types apply to one item of data. They are intuitive and suitable for many
+  simple cases e.g. most facts in the SSIM Facts Directories</td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=2 style='height:14.25pt;mso-ignore:colspan'>DB TypeN =
+  SSIM_DT_TypeN_Base or 1</td>
+  <td colspan=4 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=6 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl67 style='height:14.25pt'>Name</td>
+  <td class=xl67>DB SubTypeN</td>
+  <td class=xl67>Description</td>
+  <td class=xl67>Bits</td>
+  <td class=xl67></td>
+  <td class=xl67></td>
+ </tr>
+ <tr height=57 style='mso-height-source:userset;height:42.75pt'>
+  <td height=57 class=xl68 style='height:42.75pt'>Base.Null</td>
+  <td class=xl68>SSIM_DT_SubTypeN_Base_Null</td>
+  <td class=xl69 width=663 style='width:497pt'>Used when the SID description
+  from the Facts Directories completely defines the data and there is no need
+  to store anything apart from the SID e.g. a country shown externally as the
+  country name in the human language of choice, or a 3 letter country code, or
+  a 2 letters cod according to formatting options</td>
+  <td class=xl69 width=132 style='width:99pt'></td>
+  <td class=xl68></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 style='height:14.25pt'>Base.Number</td>
+  <td>SSIM_DT_SubTypeN_Base_Number</td>
+  <td>A base 10 number as commonly understood in text form, like a Json Number</td>
+  <td>SSIM_DTB_TextData</td>
+  <td colspan=2 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 style='height:14.25pt'>Base.DateTime</td>
+  <td>SSIM_DT_SubTypeN_Base_DateTime</td>
+  <td>A UTC/GMT date and optionally time in text numeric form year first
+  CCYY.MM.DD{ HH:MM{:SS}}</td>
+  <td>SSIM_DTB_TextData</td>
+  <td colspan=2 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 style='height:14.25pt'>Base.String</td>
+  <td>SSIM_DT_SubTypeN_Base_String</td>
+  <td>A string of UTF-8 encoded characters</td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 style='height:14.25pt'>Base.Blob</td>
+  <td>SSIM_DT_SubTypeN_Base_Blob</td>
+  <td>A sequence of binary bytes - a blob of data</td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 style='height:14.25pt'>Base.File</td>
+  <td>SSIM_DT_SubTypeN_Base_File</td>
+  <td>A file in binary form</td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 style='height:14.25pt'></td>
+  <td colspan=5 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl67 style='height:14.25pt'>Notes</td>
+  <td colspan=5 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'><font
+  class="font6">a.</font><font class="font0"> A SID is an SSIM Id used to
+  provide standardised semantic description of an item of data</font></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'><font
+  class="font6">b.</font><font class="font0"> The Bits column is only relevant
+  to a programmer. The Constants quoted are defined in ConstantsSSIM.inc</font></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'><font
+  class="font6">c.</font><font class="font0"> For a DateTime the &quot;.&quot;
+  and ':' separators can be any non digit characters, sections enclosed within
+  {}s are optional, and</font></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=5 style='height:14.25pt;mso-ignore:colspan'><span
+  style='mso-spacerun:yes'>    </span>CC = 2 digit Century, YY<span
+  style='mso-spacerun:yes'>  </span>= 2 digit Year, MM = 2 digit Month 01 to
+  12, DD = 2 digit Day of the month 01 to 31, HH = Hour of the day 00 to 23, MM
+  = Minute of the hour 00 to 59, SS = Second of the minute 00 to 59</td>
+  <td></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=95 style='width:71pt'></td>
+  <td width=229 style='width:171pt'></td>
+  <td width=663 style='width:497pt'></td>
+  <td width=132 style='width:99pt'></td>
+  <td width=343 style='width:257pt'></td>
+  <td width=68 style='width:51pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

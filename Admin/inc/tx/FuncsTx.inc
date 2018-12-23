@@ -152,33 +152,6 @@ function HypercubesFromList($hypercubesCsvList) {
 # Utils Modules Output Fns #
 ############################
 
-function Fold($txt, $len) {
-  $remain = $txt;
-  $folded = '';
-  while (strlen($remain) > $len) {
-    $folded .= substr($remain, 0, $len) . '<br>';
-    $remain  = '&nbsp;&nbsp;'.substr($remain, $len);
-  }
-  return $folded . $remain;
-}
-
-function FoldOnSpace($txt, $len) {
-  $segsA = explode(' ', $txt);
-  $folded = '';
-  $lenThis = 0; # length of this line
-  foreach ($segsA as $i => $seg) {
-    $lenSeg = strlen($seg);
-    if ($lenThis + $lenSeg + 1 > $len) {
-      $folded = (!$i ? '' : $folded.'<br>&nbsp;&nbsp;').Fold($seg, $len);
-      $lenThis = $lenSeg;
-    }else{
-      $folded .= ' '.$seg;
-      $lenThis += $lenSeg + 1;
-    }
-  }
-  return $folded;
-}
-
 function Head($title, $centerB=false) {
   global $CentredB;
   $CentredB = $centerB;

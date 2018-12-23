@@ -30,6 +30,8 @@ string  IntAToSortedUniqueCsvList($aA) Generate a sorted duplicates excluded csv
 
 Misc Functions
 --------------
+string     Fold($txt, $len)             Returns $txt folded for html output with <br>&nbsp;&nbsp; inserted at $len intervals
+string     FoldOnSpace($txt, $len)      Returns $txt folded for html output with <br>&nbsp;&nbsp; inserted at the last space before $len intervals
 int        Match($val, $matchA)         Case insensitive match of $val against an array of possible values. Returns the index+1 on a match, 0 o'wise
 int        Matchn($val, $matchA)        Case insensitive match of $val against an array of possible match values for the length of the possible match values. Returns the index+1 on a match, 0 o'wise
 string     StrField($s, $sep, $n)       Returns field $n base zero from a string $s with $sep separators
@@ -154,6 +156,44 @@ function IntAToSortedUniqueCsvList($aA) {
 ##################
 # Misc Functions #
 ##################
+
+# Fold($txt, $len)
+# ----
+# Returns $txt folded for html output with <br>&nbsp;&nbsp; inserted at $len intervals
+function Fold($txt, $len) {
+  if (strlen($txt) <= $len)
+    return $txt;
+  $remain = $txt;
+  $folded = '';
+  while (strlen($remain) > $len) {
+    $folded .= substr($remain, 0, $len) . '<br>';
+    $remain  = '&nbsp;&nbsp;'.substr($remain, $len);
+  }
+  return $folded . $remain;
+}
+
+# FoldOnSpace($txt, $len)
+# -----------
+# Returns $txt folded for html output with <br>&nbsp;&nbsp; inserted at the last space before $len intervals
+function FoldOnSpace($txt, $len) {
+  if (strlen($txt) <= $len)
+    return $txt;
+  $segsA = explode(' ', $txt);
+  $folded = '';
+  $lenThis = 0; # length of this line
+  foreach ($segsA as $i => $seg) {
+    $lenSeg = strlen($seg);
+    if ($lenThis + $lenSeg + 1 > $len) {
+      $folded = (!$i ? '' : $folded.'<br>&nbsp;&nbsp;').Fold($seg, $len);
+      $lenThis = $lenSeg;
+    }else{
+      $folded .= ' '.$seg;
+      $lenThis += $lenSeg + 1;
+    }
+  }
+  return $folded;
+}
+
 # Match
 # -----
 # Case insensitive match of $val against an array of possible values
